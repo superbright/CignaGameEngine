@@ -147,8 +147,6 @@ function Viz(selector, opts) {
 Viz.prototype.updateBalloons = function() {
 
     var self = this;
-    console.log('updating');
-    console.log(this.data);
 
     var balloonGroups =  this.chartBody.selectAll('.balloon-container')
         .data(this.data);
@@ -195,7 +193,7 @@ Viz.prototype.updateBalloons = function() {
         .transition()
         .duration(1000)
         .attr('cy', function(d, i) {
-            console.log(d, i);
+            // console.log(d, i);
             return self.y(d);
         });
 
@@ -225,7 +223,7 @@ Viz.prototype.updateBalloons = function() {
 
 Viz.prototype.appendData = function(data) {
 
-    console.log(data);
+    // console.log(data);
 
     if(data.length >= 2) {
         // opponent

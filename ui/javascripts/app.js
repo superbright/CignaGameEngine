@@ -15,32 +15,45 @@ var AreaViz = require('./viz/area');
 var BalloonViz = require('./viz/balloon');
 var StopwatchViz = require('./viz/stopwatch');
 
-var draw = function() {
 
-    var area = new AreaViz('#area-viz');
-    var balloon = new BalloonViz('#balloon-viz');
-    var stopwatch = new StopwatchViz('#stopwatch-viz', [[], []]);
-    
+var area = new AreaViz('#area-viz');
+var balloon = new BalloonViz('#balloon-viz');
+var stopwatch = new StopwatchViz('#stopwatch-viz', [[], []]);
 
-    // send some fake step data
-    var count = 0;
-    var interval = setInterval(function() {
-        var nextX = Math.round(10 + (0.5 - Math.random()) * 5);
-        var nextY = Math.round(10 + (0.5 - Math.random()) * 5);
 
-        var newData = [nextX, nextY];
+// send some fake step data
+// var count = 0;
+// var interval = setInterval(function() {
+//     var nextX = Math.round(10 + (0.5 - Math.random()) * 5);
+//     var nextY = Math.round(10 + (0.5 - Math.random()) * 5);
 
-        area.appendData([nextX]);
-        stopwatch.appendData(newData);
-        balloon.appendData(newData);
-        if(count >= 19) {
-            clearInterval(interval);
-        }
-        count++;
-    }, 1000);
-};
+//     var newData = [nextX, nextY];
+
+//     area.appendData([nextX]);
+//     stopwatch.appendData(newData);
+//     balloon.appendData(newData);
+//     if(count >= 19) {
+//         clearInterval(interval);
+//     }
+//     count++;
+// }, 1000);
+
+var socket = io.connect('http://localhost');
+socket.on('step', function (data) {
+    //socket.emit('my other event', { my: 'data' });
+    if(data.data === -1) {
+        return;
+    }
+    console.log(data);
+
+    area.appendData([data.data[0]]);
+    stopwatch.appendData(data.data);
+    balloon.appendData(data.data);
+});
+
+
 
 // window.onresize = draw;
-draw();
+// draw();
 
 

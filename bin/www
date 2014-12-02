@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var debug = require('debug')('cignagameengine');
 var app = require('../app');
+var _ = require('lodash');
 
 app.set('port', process.env.PORT || 3000);
 
@@ -15,15 +16,20 @@ var timespan = 1000;
 var currenttime = 0;
 
 
+var sum = function(s) {
+  return _.reduce(s, function(memo, num) { return memo + num; }, 0);
+};
 
 io.on('connection', function (socket) {
 
   //get dummy step data
-  var stepdata =   data.games[0].data.leftplayer.steps;
+  var leftStepData = data.games[0].data.leftplayer.steps;
+  var rightStepData = data.games[0].data.rightplayer.steps;
+
   var intervalObj = setInterval(function() {
-  			socket.emit('step',{'count' : currenttime,'data':stepdata[currenttime]});
+  			socket.emit('step',{'count' : currenttime,'data':[sum(leftStepData[currenttime]), sum(rightStepData[currenttime])]});
   			currenttime++;
-  			if(currenttime >= stepdata.length) {
+  			if(currenttime >= leftStepData.length) {
   				socket.emit('step',{'count' : currenttime,'data':-1});
   				currenttime = 0;
   			};

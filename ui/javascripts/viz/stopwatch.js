@@ -118,12 +118,12 @@ Viz.prototype.calculateAngles = function() {
     var angles = [];
     var expectedMax = this.getExpectedMax();
 
-    console.log('expected max: ' + expectedMax);
+    // console.log('expected max: ' + expectedMax);
 
     _.each(this.data, function(steps) {
         var sum = _.reduce(steps, function(memo, num) { return memo + num; }, 0);
         angles.push(2 * Math.PI * sum / expectedMax);
-        console.log(sum / expectedMax);
+        // console.log(sum / expectedMax);
     });
 
     return angles;

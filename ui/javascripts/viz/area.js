@@ -190,7 +190,7 @@ LineGraph.prototype.appendData = function(data) {
     this.data = this.data.concat(data);
     data = this.data;
 
-    console.log(data);
+    // console.log(data);
 
     var yMax = d3.max(data);
     var yDomain = [0, Math.max(yMax, 20)];
