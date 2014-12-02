@@ -9,6 +9,14 @@ var server = app.listen(app.get('port'), function() {
   debug('Express server listening on port ' + server.address().port);
 });
 
+// screensaver
+// instructions
+// ready/start
+// countdown
+// gameplay
+// finishing screens
+
+
 
 var io = require('socket.io')(server);
 var data = require('./data/dummy.json');
@@ -19,6 +27,7 @@ var currenttime = 0;
 var sum = function(s) {
   return _.reduce(s, function(memo, num) { return memo + num; }, 0);
 };
+
 
 io.on('connection', function (socket) {
 

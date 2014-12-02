@@ -22,21 +22,21 @@ var stopwatch = new StopwatchViz('#stopwatch-viz', [[], []]);
 
 
 // send some fake step data
-// var count = 0;
-// var interval = setInterval(function() {
-//     var nextX = Math.round(10 + (0.5 - Math.random()) * 5);
-//     var nextY = Math.round(10 + (0.5 - Math.random()) * 5);
+var count = 0;
+var interval = setInterval(function() {
+    var nextX = Math.round(10 + (0.5 - Math.random()) * 5);
+    var nextY = Math.round(10 + (0.5 - Math.random()) * 5);
 
-//     var newData = [nextX, nextY];
+    var newData = [nextX, nextY];
 
-//     area.appendData([nextX]);
-//     stopwatch.appendData(newData);
-//     balloon.appendData(newData);
-//     if(count >= 19) {
-//         clearInterval(interval);
-//     }
-//     count++;
-// }, 1000);
+    area.appendData([nextX]);
+    stopwatch.appendData(newData);
+    balloon.appendData(newData);
+    if(count >= 19) {
+        clearInterval(interval);
+    }
+    count++;
+}, 1000);
 
 var socket = io.connect('http://localhost');
 socket.on('step', function (data) {
@@ -46,9 +46,9 @@ socket.on('step', function (data) {
     }
     console.log(data);
 
-    area.appendData([data.data[0]]);
-    stopwatch.appendData(data.data);
-    balloon.appendData(data.data);
+    // area.appendData([data.data[0]]);
+    // stopwatch.appendData(data.data);
+    // balloon.appendData(data.data);
 });
 
 
