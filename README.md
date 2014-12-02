@@ -1,11 +1,11 @@
-= CIGNA STEP UP =
+# CIGNA STEP UP #
 Node.js Game Engine
 
-== INSTALLATION ==
+## INSTALLATION ##
 git clone 
 cd directory
 npm install
 
-== RUN ==
+## RUN ##
 node bin/www
 localhost:3000
