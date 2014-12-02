@@ -1,0 +1,35 @@
+#!/usr/bin/env node
+var debug = require('debug')('cignagameengine');
+var app = require('../app');
+
+app.set('port', process.env.PORT || 3000);
+
+var server = app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + server.address().port);
+});
+
+
+var io = require('socket.io')(server);
+var data = require('./data/dummy.json');
+var timespan = 1000;
+var currenttime = 0;
+
+
+
+io.on('connection', function (socket) {
+
+  //get dummy step data
+  var stepdata =   data.games[0].data.leftplayer.steps;
+  var intervalObj = setInterval(function() {
+  			socket.emit('step',{'count' : currenttime,'data':stepdata[currenttime]});
+  			currenttime++;
+  			if(currenttime >= stepdata.length) {
+  				socket.emit('step',{'count' : currenttime,'data':-1});
+  				currenttime = 0;
+  			};
+  },timespan);
+ 
+   socket.on("disconnect", function () {
+        clearInterval(intervalObj);
+   });
+});
