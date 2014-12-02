@@ -2,10 +2,13 @@
 Node.js Game Engine
 
 ## INSTALLATION ##
-git clone 
-cd directory
-npm install
+
+* `git clone`
+* `cd directory`
+* `npm install`
 
 ## RUN ##
-node bin/www
-localhost:3000
+
+* Compile front-end files with gulp: `gulp`
+* Run node server `npm start`
+* Open [http://localhost:3000](http://localhost:3000)

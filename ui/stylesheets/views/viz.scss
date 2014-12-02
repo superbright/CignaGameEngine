@@ -1,0 +1,107 @@
+
+svg {
+    .plot {
+        fill: #ffffff;
+    }
+    .grid.y .tick {
+        stroke: none;
+        opacity: 0;
+
+        &:nth-child(even) {
+            rect {
+                fill: rgba(0, 0, 0, 0.1);
+            }
+        }   
+
+        &:nth-child(odd) {
+            rect {
+                fill: none;
+            }
+        }   
+    }
+
+    .grid.y path {
+        stroke-width: 0;
+    }
+    
+    // .axis path, .axis line {
+    //     fill: none;
+    //     stroke: none;
+    //     shape-rendering: crispEdges;
+    // }
+
+    // .axis path {
+    //     display: none;
+    // }
+
+    .balloon-container {
+        line {
+            stroke: black;
+            stroke-width: 5px;
+        }
+
+        text {
+            font-size: 36px;
+            fill: white;
+            font-family: sans-serif;
+        }
+
+        &:nth-child(1) {
+            line {
+                stroke: $green;
+            }
+
+            circle {
+                fill: $green;
+            }
+        }
+        &:nth-child(2) {
+            line {
+                stroke: $blue;
+            }
+
+            circle {
+                fill: $blue;
+            }
+        }
+        &:nth-child(3) {
+            line {
+                stroke: $orange;
+            }
+
+            circle {
+                fill: $orange;
+            }
+        }
+    }
+
+    &.stopwatch-container {
+        path {
+            &.opponent {
+                fill: $blue;
+            }
+
+            &.me {
+                fill: $orange;
+            }
+        }
+    }
+
+    &.area-container {
+        .grid .tick {
+            stroke: #ddd;
+            opacity: 1;
+        }
+
+        .grid path {
+            stroke-width: 1;
+        }
+
+        path {
+
+            fill: url(#area-gradient);
+            stroke: $blue;
+            stroke-width: 2px;
+        }
+    }
+}

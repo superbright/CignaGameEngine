@@ -1,0 +1,50 @@
+@import "mixins";
+@import "fonts";
+@import "lib/base";
+@import "lib/skeleton";
+
+.centered {
+  text-align: center;
+}
+
+
+$blue: #0e75c9;
+$orange: #fd6608;
+$green: #17b42e;
+
+$header-height: 60px;
+.header-container {
+
+    
+    width: 100%;
+    background-color: black;
+
+    position: fixed;
+    height: $header-height;
+
+    h3 {
+        color: #fff;
+        margin: 0;
+        padding-top: $header-height / 4;
+    }
+
+    z-index: 1000;
+}
+
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.mobile {
+  display: none;
+}
+
+
+@import "views/viz";
+@import "mobile";
+
