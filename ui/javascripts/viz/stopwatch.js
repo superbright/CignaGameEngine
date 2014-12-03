@@ -2,7 +2,12 @@
 
 var _ = require('lodash');
 var utils = require('../utils');
-var d3 = require('d3')
+var d3 = require('d3');
+
+
+
+
+
 
 /*
  * View controller
@@ -37,24 +42,97 @@ function Viz(selector, data) {
         .append('svg:g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
+
+    var opponentArcSize = [0.93 * width / 2, width / 2];
+    var myArcSize = [0.80 * width / 2, 0.86 * width / 2];
+
+
     
+    // background-circle
+    svg.append('circle')
+        .attr('d', this.opponentArc)
+        .attr('class', 'background')
+        .attr('r', width / 2 - 5)
+        .attr('transform', 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
+
+
+
+
+
+
+    
+    // competitor circles
+
+    var myCircleG = svg.append('g')
+        .attr('class', 'me')
+        .attr('transform', 'translate(' + (width / 2) + ', ' + ((width / 2) - 100) + ')');
+
+    myCircleG.append('circle')
+        .attr('class', 'me')
+        .attr('r', width / 4 - 25);
+
+    myCircleG
+        .append('text')
+        .attr('class', 'player-name')
+        .attr('text-anchor', 'middle')
+        .attr('dy', -25)
+        .text('MATTHEW');
+    
+    myCircleG
+        .append('text')
+        .attr('class', 'score')
+        .attr('text-anchor', 'middle')
+        .attr('dy', 35)
+        .text('0');
+
+
+    var opponentCircleG = svg.append('g')
+        .attr('class', 'competitor')
+        .attr('transform', 'translate(' + (width / 2) + ', ' + ((width / 2) + 125) + ')');
+
+
+    opponentCircleG.append('circle')
+        .attr('class', 'competitor')
+        .attr('r', width / 6 - 25);
+        
+    opponentCircleG
+        .append('text')
+        .attr('class', 'player-name')
+        .attr('text-anchor', 'middle')
+        .attr('dy', -25)
+        .text('OPPONENT');
+    
+    opponentCircleG
+        .append('text')
+        .attr('class', 'score')
+        .attr('text-anchor', 'middle')
+        .attr('dy', 25)
+        .text('0');
+
+
     // opponent arc
     this.opponentArc = d3.svg.arc()
-        .innerRadius(0.93 * width / 2)
-        .outerRadius(width / 2)
+        .innerRadius(opponentArcSize[0])
+        .outerRadius(opponentArcSize[1])
         .startAngle(0);
+
+    this.opponentPlaceholderPath = svg.append("path")
+        .datum({endAngle: 2 * Math.PI})
+        .attr("d", this.opponentArc)
+        .attr('class', 'opponent-placeholder')
+        .attr("transform", 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
 
     this.opponentPath = svg.append("path")
         .datum({endAngle: 0})
         .attr("d", this.opponentArc)
         .attr('class', 'opponent')
-        .attr("transform", 'translate(' + (width / 2) + ', ' + (width / 2) + ')')
+        .attr("transform", 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
 
 
     // opponent arc
     this.myArc = d3.svg.arc()
-        .innerRadius(0.84 * width / 2)
-        .outerRadius(0.86 * width / 2)
+        .innerRadius(myArcSize[0])
+        .outerRadius(myArcSize[1])
         .startAngle(0);
     
     this.myPath = svg.append("path")
@@ -62,20 +140,6 @@ function Viz(selector, data) {
         .attr("d", this.myArc)
         .attr('class', 'me')
         .attr("transform", 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
-
-
-    svg.append('text')
-        .attr('x', width/2)
-        .attr('y', width/4)
-        .attr('text-anchor', 'middle')
-        .attr('class', 'my-score');
-    
-    svg.append('text')
-        .attr('x', width/2)
-        .attr('y', 3*width/4)
-        .attr('text-anchor', 'middle')
-        .attr('class', 'opponent-score');
-
 
 
     this.getArcTweenFunc = function(arc) {
@@ -140,7 +204,7 @@ Viz.prototype.updateArcs = function() {
             .duration(1000)
             .call(this.getArcTweenFunc(this.myArc), angles[0]);
 
-        d3.select('text.my-score')
+        d3.select('g.me .score')
             .text(_.reduce(this.data[0], function(memo, num) { return memo + num; }, 0));
     }
 
@@ -150,7 +214,7 @@ Viz.prototype.updateArcs = function() {
             .duration(1000)
             .call(this.getArcTweenFunc(this.opponentArc), angles[1]);
         
-        d3.select('text.opponent-score')
+        d3.select('g.competitor .score')
             .text(_.reduce(this.data[1], function(memo, num) { return memo + num; }, 0));
     }
 }

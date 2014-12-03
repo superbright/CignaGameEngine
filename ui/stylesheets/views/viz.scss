@@ -1,4 +1,24 @@
 
+
+
+.viz-holder {
+    position: absolute;
+    width: 33%;
+    top: 20%;
+
+    &.balloon {
+        left: 0;
+    }
+
+    &.stopwatch {
+        left: 33%;
+    }
+
+    &.area {
+        right: 0;
+    }
+}
+
 svg {
     .plot {
         fill: #ffffff;
@@ -9,7 +29,7 @@ svg {
 
         &:nth-child(even) {
             rect {
-                fill: rgba(0, 0, 0, 0.1);
+                fill: #1b3f61;
             }
         }   
 
@@ -34,6 +54,40 @@ svg {
     //     display: none;
     // }
 
+    &.balloon {
+
+        .axis {
+            path.domain {
+                fill: #ebeaea
+            }
+
+            .tick {
+
+                text {
+                    font-family: $sans-serif;
+                    font-weight: bold;
+                    font-size: 28px;
+                }
+
+                &:nth-child(1) {
+                    text {
+                        fill: $green;
+                    }
+                }
+                &:nth-child(2) {
+                    text {
+                        fill: $blue;
+                    }
+                }
+                &:nth-child(3) {
+                    text {
+                        fill: $orange;
+                    }
+                }
+            }
+        }
+    }
+
     .balloon-container {
         line {
             stroke: black;
@@ -43,8 +97,19 @@ svg {
         text {
             font-size: 36px;
             fill: white;
-            font-family: sans-serif;
+            font-family: $sans-serif;
+            font-weight: bold;
         }
+
+        circle {
+            stroke: white;
+
+            &.outer {
+                stroke: none;
+                opacity: 0.8;
+            }
+        }
+
 
         &:nth-child(1) {
             line {
@@ -80,17 +145,76 @@ svg {
             &.opponent {
                 fill: $blue;
             }
+            &.opponent-placeholder {
+                fill: white;
+            }
 
             &.me {
                 fill: $orange;
             }
         }
+
+        g.me {
+
+            circle {
+                fill: white;
+            }
+
+            text {
+                fill: $orange;
+                font-weight: bold;
+
+                &.player-name {
+                    font-size: 36px;
+                }
+                &.score {
+                    font-size: 64px;   
+                }
+            }
+        }
+
+        g.competitor {
+            circle {
+                fill: white;
+            }
+
+            text {
+                fill: $blue;
+                font-weight: bold;
+
+                &.player-name {
+                    font-size: 18px;
+                }
+                &.score {
+                    font-size: 48px;   
+                }
+            }
+        }
+
+        circle {
+            &.background {
+                fill: #b2bcc4;
+            }
+        }
     }
 
     &.area-container {
+
+        .axis {
+            path {
+                display: none;
+            }
+
+            text {
+                fill: white;
+                font-family: $sans-serif;
+                font-size: 18px;
+            }
+        }
+
         .grid .tick {
             stroke: #ddd;
-            opacity: 1;
+            opacity: 0.6 !important;
         }
 
         .grid path {
@@ -100,8 +224,8 @@ svg {
         path {
 
             fill: url(#area-gradient);
-            stroke: $blue;
-            stroke-width: 2px;
+            // stroke: $blue;
+            // stroke-width: 2px;
         }
     }
 }

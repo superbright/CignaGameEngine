@@ -4,8 +4,8 @@ var _ = require('lodash');
 
 var margin = {
     top: 30,
-    right: 20,
-    bottom: 20,
+    right: 35,
+    bottom: 25,
     left: 45
 };
 
@@ -20,7 +20,7 @@ var LineGraph = function(selector, data, opts) {
     this.opts = opts;
     var self = this;
 
-    var width = Math.min(600, $(selector).width());
+    var width = Math.min(600, $(selector).width() - margin.left - margin.right);
     var height = Math.min(width / Math.sqrt(2), 0.7 * $(document).height());
 
 
@@ -49,16 +49,23 @@ var LineGraph = function(selector, data, opts) {
         .append('svg:g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    svg.append('svg:rect')
-        .attr('width', width)
-        .attr('height', height)
-        .attr('class', 'plot');
-
 
     this.xAxis = d3.svg.axis()
         .scale(this.x)
         .orient('bottom')
-        .ticks(25);
+        .ticks(25)
+        .tickFormat(function(d, i){
+            console.log(d, i);
+            if(d === 0) {
+                return '0';
+            }
+
+            if(i % 10 === 0) {
+                return i + ' sec'
+            }
+
+            return ''
+        });
 
     svg.append('svg:g')
         .attr('class', 'x axis')
@@ -68,7 +75,19 @@ var LineGraph = function(selector, data, opts) {
     this.yAxis = d3.svg.axis()
         .scale(this.y)
         .orient('left')
-        .ticks(25);
+        .ticks(25)
+        .tickFormat(function(d, i){
+            console.log(d, i);
+            // if(d === 0) {
+            //     return '0';
+            // }
+
+            if(i % 10 === 0) {
+                return i
+            }
+            
+            return ''
+        });
 
     svg.append('g')
         .attr('class', 'y axis')
@@ -102,10 +121,10 @@ var LineGraph = function(selector, data, opts) {
       .attr("id", "area-gradient")
       .attr("gradientUnits", "userSpaceOnUse")
       .attr("x1", 0).attr("y1", height)
-      .attr("x2", 0).attr("y2", 0)
+      .attr("x2", 0).attr("y2", 0.35 * height)
       .selectAll("stop")
       .data([
-        {offset: "0%", color: "rgba(255, 204, 0, 0.1)"},
+        {offset: "0%", color: "rgba(255, 204, 0, 0.3)"},
         {offset: "100%", color: "rgba(255, 204, 0, 1)"}
       ])
     .enter().append("stop")
@@ -165,7 +184,7 @@ LineGraph.prototype.updateCircles = function() {
         .attr('opacity', 0)
         .transition()
         .delay(850)
-        .attr('opacity', 1);
+        .attr('opacity', 0.7);
 
     // ENTER + UPDATE
     // Appending to the enter selection expands the update selection to include

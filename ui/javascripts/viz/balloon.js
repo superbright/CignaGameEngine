@@ -2,7 +2,9 @@
 
 var _ = require('lodash');
 var utils = require('../utils');
-var d3 = require('d3')
+var d3 = require('d3');
+
+var bottomOffset = 5;
 
 /*
  * View controller
@@ -58,22 +60,32 @@ function Viz(selector, opts) {
         top: x.rangeBand() / 4,
         left: 0,
         right: 0,
-        bottom: 0
+        bottom: 45
     };
 
     var svg = d3.select(this.$el[0])
         .append('svg:svg')
+        .attr('class', 'balloon')
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('svg:g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    // var makeYAxis = function () {
-    //     return d3.svg.axis()
-    //         .scale(y)
-    //         .orient('left')
-    //         .ticks(15);
-    // };
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient('bottom')
+        // .tickFormat(function(d, i){
+        //     console.log(d, i);
+        //     if(d === 0) {
+        //         return '0';
+        //     }
+
+        //     if(i % 10 === 0) {
+        //         return i + ' sec'
+        //     }
+
+        //     return ''
+        // });
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -91,15 +103,34 @@ function Viz(selector, opts) {
     //     .tickSize(-height, 0, 0)
     //     .tickFormat(''));
 
+
+
     
+    svg.append('svg:g')
+        .attr('class', 'x axis')
+        .attr('transform', 'translate(0, ' + (height + bottomOffset) + ')')
+        .call(xAxis
+                .tickFormat(function(d, i) {
+                    console.log(d, i);
+                    if(d === 0) {
+                        return 'LEADER';
+                    } else if(d === 1) {
+                        return (numPlayers > 1) ? 'COMPETITOR' : 'ME';
+                    }
+
+                    return 'ME';
+                }));
+
+    svg.selectAll('.x.axis .tick text')
+        .attr('dy', 30);
+
+
+
     svg.append('g')
         .attr('class', 'y grid')
         .call(yAxis
                 .tickSize(-width, 0, 0)
-                .tickFormat(function(d) {
-                    console.log(d);
-                    return '';
-                })
+                .tickFormat('')
         );
 
     var lastY = 0;
@@ -119,15 +150,13 @@ function Viz(selector, opts) {
             return h;
         });
 
-
-
     var clip = svg.append('svg:clipPath')
         .attr('id', 'clip')
         .append('svg:rect')
         .attr('x', 0)
         .attr('y', 0)
         .attr('width', width)
-        .attr('height', height);
+        .attr('height', height + bottomOffset);
 
     var chartBody = svg.append('g')
         .attr('clip-path', 'url(#clip)');
@@ -158,15 +187,6 @@ Viz.prototype.updateBalloons = function() {
         .attr('class', 'balloon-container');
 
     balloonContainer
-        .append('circle')
-        .attr('cx', function(d, i) {
-            console.log(i);
-            return self.x(i) + self.x.rangeBand() / 2;
-        }).attr('r', function() {
-            return self.x.rangeBand() / 4;
-        });
-
-    balloonContainer
         .append('line')
         .attr('x1', function(d, i) {
             return self.x(i) + self.x.rangeBand() / 2;
@@ -177,6 +197,27 @@ Viz.prototype.updateBalloons = function() {
         .attr('x2', function(d, i) {
             return self.x(i) + self.x.rangeBand() / 2;
         });
+
+    balloonContainer
+        .append('circle')
+        .attr('class', 'outer')
+        .attr('cx', function(d, i) {
+            console.log(i);
+            return self.x(i) + self.x.rangeBand() / 2;
+        }).attr('r', function() {
+            return self.x.rangeBand() / 3 + 20;
+        });
+    balloonContainer
+        .append('circle')
+        .attr('class', 'inner')
+        .attr('cx', function(d, i) {
+            console.log(i);
+            return self.x(i) + self.x.rangeBand() / 2;
+        }).attr('r', function() {
+            return self.x.rangeBand() / 3;
+        });
+
+
 
 
     balloonContainer
@@ -189,7 +230,16 @@ Viz.prototype.updateBalloons = function() {
 
 
     balloonGroups
-        .select('circle')
+        .select('circle.inner')
+        .transition()
+        .duration(1000)
+        .attr('cy', function(d, i) {
+            // console.log(d, i);
+            return self.y(d);
+        });
+
+    balloonGroups
+        .select('circle.outer')
         .transition()
         .duration(1000)
         .attr('cy', function(d, i) {
@@ -203,7 +253,7 @@ Viz.prototype.updateBalloons = function() {
         .transition()
         .duration(1000)
         .attr('y2', function(d, i) {
-            return self.y(d);
+            return self.y(d) + (self.x.rangeBand() / 3 + 20);
         });
 
     balloonGroups
@@ -214,8 +264,9 @@ Viz.prototype.updateBalloons = function() {
             return d;
         })
         .attr('y', function(d, i) {
-            return self.y(d) + 10;
-        });
+            return self.y(d);
+        })
+        .attr('dy', 12);
 
     balloonGroups.exit().remove();
 
