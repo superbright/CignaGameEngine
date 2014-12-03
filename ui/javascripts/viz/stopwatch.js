@@ -185,7 +185,7 @@ function Viz(selector, data) {
                     d.endAngle = interpolate(t);
                     return arc(d);
                 };
-            });
+            }).ease('linear');
         }
     };
 
@@ -236,6 +236,7 @@ Viz.prototype.updateArcs = function() {
 
         this.myPath
             .transition()
+            .ease('linear')
             .duration(1000)
             .call(this.getArcTweenFunc(this.myArc), angles[0]);
 
@@ -246,6 +247,7 @@ Viz.prototype.updateArcs = function() {
     if(angles.length >= 2) {
         this.opponentPath
             .transition()
+            .ease('linear')
             .duration(1000)
             .call(this.getArcTweenFunc(this.opponentArc), angles[1]);
         

@@ -232,6 +232,7 @@ Viz.prototype.updateBalloons = function() {
     balloonGroups
         .select('circle.inner')
         .transition()
+        .ease('linear')
         .duration(1000)
         .attr('cy', function(d, i) {
             // console.log(d, i);
@@ -241,6 +242,7 @@ Viz.prototype.updateBalloons = function() {
     balloonGroups
         .select('circle.outer')
         .transition()
+        .ease('linear')
         .duration(1000)
         .attr('cy', function(d, i) {
             // console.log(d, i);
@@ -251,6 +253,7 @@ Viz.prototype.updateBalloons = function() {
     balloonGroups
         .select('line')
         .transition()
+        .ease('linear')
         .duration(1000)
         .attr('y2', function(d, i) {
             return self.y(d) + (self.x.rangeBand() / 3 + 20);
@@ -259,6 +262,7 @@ Viz.prototype.updateBalloons = function() {
     balloonGroups
         .select('text')
         .transition()
+        .ease('linear')
         .duration(1000)
         .text(function(d, i) {
             return d;
