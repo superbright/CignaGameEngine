@@ -6,7 +6,7 @@ var margin = {
     top: 30,
     right: 35,
     bottom: 25,
-    left: 45
+    left: 30
 };
 
 
@@ -121,11 +121,11 @@ var LineGraph = function(selector, data, opts) {
       .attr("id", "area-gradient")
       .attr("gradientUnits", "userSpaceOnUse")
       .attr("x1", 0).attr("y1", height)
-      .attr("x2", 0).attr("y2", 0.35 * height)
+      .attr("x2", 0).attr("y2", 0)
       .selectAll("stop")
       .data([
-        {offset: "0%", color: "rgba(255, 204, 0, 0.3)"},
-        {offset: "100%", color: "rgba(255, 204, 0, 1)"}
+        {offset: "0%", color: "rgba(255, 204, 0, 0.6)"},
+        {offset: "50%", color: "rgba(255, 204, 0, 1)"}
       ])
     .enter().append("stop")
     .attr("offset", function(d) { return d.offset; })

@@ -47,13 +47,46 @@ function Viz(selector, data) {
     var myArcSize = [0.80 * width / 2, 0.86 * width / 2];
 
 
+
+    // gradients
+    var defs = svg.append('svg:defs');
+
+
+    defs.append("radialGradient")
+        .attr("id", "background-gradient")
+        .selectAll("stop")
+        .data([
+            {offset: "40%", color: "#cdd8e1"},
+            {offset: "90%", color: "#a0aab3"}
+        ])
+        .enter().append("stop")
+        .attr("offset", function(d) { return d.offset; })
+        .attr("stop-color", function(d) { return d.color; });
+
+    defs.append("radialGradient")
+        .attr("id", "player-gradient")
+        .selectAll("stop")
+        .data([
+            {offset: "93%", color: "white"},
+            {offset: "100%", color: "#94adc4"}
+        ])
+        .enter().append("stop")
+        .attr("offset", function(d) { return d.offset; })
+        .attr("stop-color", function(d) { return d.color; });
+
+
+
+
     
     // background-circle
     svg.append('circle')
         .attr('d', this.opponentArc)
-        .attr('class', 'background')
+        // .attr('class', 'background')
+        .attr('fill', 'url(#background-gradient)')
         .attr('r', width / 2 - 5)
         .attr('transform', 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
+
+
 
 
 
@@ -68,7 +101,8 @@ function Viz(selector, data) {
         .attr('transform', 'translate(' + (width / 2) + ', ' + ((width / 2) - 100) + ')');
 
     myCircleG.append('circle')
-        .attr('class', 'me')
+        // .attr('class', 'me')
+        .attr('fill', 'url(#player-gradient)')
         .attr('r', width / 4 - 25);
 
     myCircleG
@@ -92,7 +126,8 @@ function Viz(selector, data) {
 
 
     opponentCircleG.append('circle')
-        .attr('class', 'competitor')
+        // .attr('class', 'competitor')
+        .attr('fill', 'url(#player-gradient)')
         .attr('r', width / 6 - 25);
         
     opponentCircleG
