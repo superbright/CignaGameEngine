@@ -43,7 +43,7 @@ gulp.task('gzip', ['build'], function() {
 
 gulp.task('browserify', function() {
     // Single entry point to browserify
-    return gulp.src('ui/javascripts/app.js')
+    gulp.src('ui/javascripts/app.js')
         .pipe(browserify({
             debug : !PRODUCTION_MODE
         }))
@@ -51,6 +51,17 @@ gulp.task('browserify', function() {
         .on('error', gutil.beep)
         .pipe(gulpif(PRODUCTION_MODE, uglify()))
         .pipe(gulp.dest('./public/javascripts/'))
+        .pipe( livereload( server ));
+    
+
+    return gulp.src('ui/javascripts/pages/*.js')
+        .pipe(browserify({
+            debug : !PRODUCTION_MODE
+        }))
+        .on('error', gutil.log)
+        .on('error', gutil.beep)
+        .pipe(gulpif(PRODUCTION_MODE, uglify()))
+        .pipe(gulp.dest('./public/javascripts/pages'))
         .pipe( livereload( server ));
 });
 
@@ -130,6 +141,7 @@ gulp.task('watch', function () {
     gulp.watch('ui/stylesheets/**/*.{scss,css}',['css', 'jade']);
     gulp.watch('ui/javascripts/**/*.js',['js']);
     gulp.watch('ui/templates/**/*.jade',['jade', 'js']);
+    gulp.watch('views/**/*.jade',['js']);
   });
 });
 

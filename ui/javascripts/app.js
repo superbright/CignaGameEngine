@@ -40,8 +40,6 @@
 
 var SlideController = require('./views/slide-controller');
 var slideController = new SlideController($('.outer-container'));
-slideController.setState('countdown');
-
 
 
 var socket = io.connect('http://localhost');
@@ -50,11 +48,17 @@ socket.on('step', function (data) {
     if(data.data === -1) {
         return;
     }
-    // console.log(data);
+    console.log(data);
 
     // area.appendData([data.data[0]]);
     // stopwatch.appendData(data.data);
     // balloon.appendData(data.data);
+});
+
+socket.on('setState', function(data) {
+    console.log(data);
+
+    slideController.setState(data.state)
 });
 
 

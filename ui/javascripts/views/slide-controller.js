@@ -14,37 +14,60 @@ var controllers = {
 };
 
 
+var defaultSlideTime = 2000;
+
 
 var states = {
 
     screensaver: {
-        templates: ['screensaver/step-up', 'screensaver/win'],
+        screens: [{
+            template: 'screensaver/step-up'
+        }, {
+            template: 'screensaver/win'
+        }],
+
         loop: true
     },
 
     instructions: {
-        templates: ['starting/instructions'],
-        loop: false,
-        next: 'countdown'
+        screens: [{
+            template: 'starting/welcome'
+        }, {
+            template: 'starting/instructions'
+        }],
+        loop: false
     },
 
     countdown: {
-        templates: ['countdown/ready', 'countdown/3', 'countdown/2', 'countdown/1', 'countdown/go'],
-        loop: false,
-        next: 'gameplay'
+        screens: [{
+            template: 'countdown/ready'
+        }, {
+            template: 'countdown/3'
+        }, {
+            template: 'countdown/2'
+        }, {
+            template: 'countdown/1'
+        }, {
+            template: 'countdown/go'
+        }],
+        loop: false
     },
 
     gameplay: {
-        templates: ['gameplay/index'],
-        loop: false,
-        controller: 'gameplay-controller',
-        // next: 'postgame'
+        screens: [{
+            template: 'gameplay/index',
+            controller: 'gameplay-controller'
+        }],
+        loop: false
     },
 
     postgame: {
-        templates: ['finishing/finish', 'finishing/leaderboard'],
-        loop: false,
-        next: 'screensaver'
+        screens: [{
+            template: 'finishing/finish'
+        }, {
+            template: 'finishing/leaderboard'
+        }],
+        loop: false
     }
 }
 
@@ -57,25 +80,19 @@ function SlideViewController($el) {
     }
 
     this.$el = $el;
-
-    // this.$el.html(htmlContent({
-    //     // template variables go here
-    //     // e.g.
-    //     //
-    //     // someVar: something
-    // }));
-
-
-    // maybe you want to instantiate a vizualization:
-    //
-    // new Viz(this.$el.find('.viz-selector'));
+    this.timeouts = [];
 }
 
 
 
+SlideViewController.prototype.getScreen = function() {
+    return states[this.state].screens[this.index];
+};
+
+
 
 SlideViewController.prototype.getTemplate = function() {
-    var template = states[this.state].templates[this.index];
+    var template = states[this.state].screens[this.index].template;
 
     console.log('fetching template ' + template);
 
@@ -89,7 +106,7 @@ SlideViewController.prototype.getTemplate = function() {
 
 
 SlideViewController.prototype.getController = function() {
-    var controllerString = states[this.state].controller;
+    var controllerString = states[this.state].screens[this.index].controller;
     if(!controllerString) {
         return;
     }
@@ -103,13 +120,42 @@ SlideViewController.prototype.getController = function() {
 };
 
 
-// SlideViewController.prototype.shouldTransition = function() {
-//     console.log(this.index);
-//     return this.index >= states[this.state].templates.length;
-// }
+SlideViewController.prototype.shouldLoop = function() {
+    return (this.index === (states[this.state].screens.length - 1) && states[this.state].loop);
+};
 
-SlideViewController.prototype.getNextState = function() {
-    return states[this.state].next;
+
+SlideViewController.prototype.setScreen = function() {
+
+    var self = this;
+    var s = this.getScreen();
+    var t = this.getTemplate();
+    this.$el.html(t());
+
+    var Controller = this.getController();
+    if(Controller) {
+        this.pageController = new Controller($('.inner-container'));
+    }
+
+    var screenLength = states[this.state].screens.length;
+
+    if(this.index < screenLength - 1) {
+        var to = setTimeout(function() {
+            self.index++;
+            self.setScreen();
+        }, s.duration || defaultSlideTime);
+
+        this.timeouts.push(to);
+    } else if(this.shouldLoop()) {
+        var to = setTimeout(function() {
+            self.index = 0;
+            self.setScreen();
+        }, s.duration || defaultSlideTime);
+
+        this.timeouts.push(to);
+    } else {
+        console.log('not setting anything');
+    }
 }
 
 
@@ -117,30 +163,12 @@ SlideViewController.prototype.setState = function(state) {
     this.state = state;
     this.index = 0;
 
-    var self = this;
-    var interval = setInterval(function() {
-        
-        if(self.index >= states[self.state].templates.length) {
-            clearInterval(interval);
+    _.each(this.timeouts, function(to) {
+        clearTimeout(to);
+    });
 
-            if(states[self.state].next) {
-                self.setState(self.getNextState());
-            }
-        }
-
-        var t = self.getTemplate();
-
-        var str = t();
-        console.log(str);
-        self.$el.html(str);
-
-        var Controller = self.getController();
-        if(Controller) {
-            self.pageController = new Controller($('.inner-container'));
-        }
-
-        self.index++;
-    }, 1000);
+    this.timeouts = [];
+    this.setScreen();
 };
 
 

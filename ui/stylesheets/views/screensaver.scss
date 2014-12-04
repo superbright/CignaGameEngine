@@ -1,0 +1,17 @@
+
+.screensaver-container {
+
+    font-family: $sans-serif;
+    text-align: center;
+    @include vertical-align;
+
+    .headline {
+        text-align: center;
+        color: white;    
+        font-size: 48px;
+    }
+
+
+    
+
+}

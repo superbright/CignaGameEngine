@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var utils = require('../utilities');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -23,5 +24,26 @@ router.get('/starting/:id', function(req, res) {
 router.get('/playground', function(req, res) {
   res.render('playground', { title: 'Express' });
 });
+
+router.get('/stats', function(req, res) {
+  res.render('stats/index', { title: 'Express' });
+});
+
+router.get('/screenshot', function(req, res) {
+
+    utils.getScreenshot('gameid', 'playerid', function(err, filename) {
+
+        if(err) {
+            console.log(err);
+            return res.status(500).send('Problem creating screenshot');    
+        }
+        
+        res.status(200).send('OK');
+    });
+
+      
+});
+
+
 
 module.exports = router;
