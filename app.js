@@ -11,7 +11,7 @@ var users = require('./routes/users');
 var app = express();
 
 var SerialPort = require("serialport").SerialPort
-var serialPort = new SerialPort("/dev/ttys0", {
+var serialPort = new SerialPort("/dev/tty.usbserial-A800f82q", {
   baudrate: 57600
 });
 
