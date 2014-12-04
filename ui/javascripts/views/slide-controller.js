@@ -36,7 +36,8 @@ var states = {
         screens: [{
             template: 'starting/welcome'
         }, {
-            template: 'starting/instructions'
+            template: 'starting/instructions',
+            duration: 5000
         }],
         loop: false
     },

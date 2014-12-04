@@ -22,6 +22,10 @@ var runFakeGame = function() {
     }]);
 
     game.start();
+
+    game.on('gameOver', function() {
+        delete game;
+    });
 }
 
 

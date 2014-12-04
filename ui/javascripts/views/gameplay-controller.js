@@ -35,8 +35,8 @@ GameplayViewController.prototype.step = function(data) {
     // TODO - munge data once we decide how everything is transmitted / 
     //        how we discern left and right player
 
-    var nextX = Math.round(10 + (0.5 - Math.random()) * 5);
-    var nextY = Math.round(10 + (0.5 - Math.random()) * 5);
+    var nextX = data[0];
+    var nextY = data[1];
     var newData = [nextX, nextY];
     this.area.appendData([nextX]);
     this.stopwatch.appendData(newData);

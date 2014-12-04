@@ -17,7 +17,7 @@ socket.on('step', _.debounce(function (data) {
     }
 
     if(slideController.pageController) {
-        slideController.pageController.step(data);
+        slideController.pageController.step(data.data);
     }
 }, 400));
 
