@@ -10,21 +10,7 @@ var users = require('./routes/users');
 
 var app = express();
 
-var SerialPort = require("serialport").SerialPort
-var serialPort = new SerialPort("/dev/tty.usbserial-A800f82q", {
-  baudrate: 57600
-});
 
-serialPort.on("open", function () {
-  console.log('open');
-  serialPort.on('data', function(data) {
-    console.log('data received: ' + data);
-  });
-  serialPort.write("ls\n", function(err, results) {
-    console.log('err ' + err);
-    console.log('results ' + results);
-  });
-});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,7 +22,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'ui')));
 
 app.use('/', routes);
 app.use('/users', users);

@@ -7,7 +7,6 @@ router.get('/', function(req, res) {
   res.render('index', { title: 'Express' });
 });
 
-
 router.get('/countdown', function(req, res) {
   res.render('countdown/ready', { title: 'Express' });
 });

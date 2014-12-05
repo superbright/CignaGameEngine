@@ -10,7 +10,7 @@ var tickLength = 1000;
 
 
 /*
- * View controller
+ * Game controller
  */
 
 function Game(io, players) {
@@ -41,6 +41,7 @@ Game.prototype._advanceState = function() {
         this.end();
     } else {
         this._setState();
+        //this.end(); debug
     }
 };
 
@@ -67,7 +68,6 @@ Game.prototype._setState = function() {
     });
 };
 
-
 Game.prototype.startGameplay = function() {
 
     // read in serial stuffff.
@@ -82,6 +82,7 @@ Game.prototype.startGameplay = function() {
         });
 
         count++;
+        console.log('tick');
         if(count > gameTicks - 1) {
             clearInterval(interval);
             self.endGameplay();
@@ -89,14 +90,12 @@ Game.prototype.startGameplay = function() {
     }, tickLength);
 }
 
-
 Game.prototype.endGameplay = function() {
     var self = this;
     setTimeout(function() {
         self._advanceState();
     }, 5000);
 };
-
 
 Game.prototype.clientCompleted = function() {
     this.finishCount++;
@@ -110,5 +109,16 @@ Game.prototype.start = function() {
 };
 
 Game.prototype.end = function() {
+
+    // todo - 
+    //  * create screenshot & email it out
+    //  * emit game over event so the server can 
+    //    destroy this game object?
+    //
     console.log('ending the game');
+    this.io.emit('setState', {
+        state: 'screensaver'
+    });
+    this.emit('gameOver');
+
 };

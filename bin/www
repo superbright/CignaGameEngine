@@ -3,6 +3,7 @@ var debug = require('debug')('cignagameengine');
 var app = require('../app');
 var _ = require('lodash');
 var Game = require('../game');
+var SerialManager = require('../serialmanager');
 
 app.set('port', process.env.PORT || 3000);
 
@@ -21,11 +22,26 @@ var runFakeGame = function() {
         name: 'Matt'
     }]);
 
+    console.log('run fake game'); 
+
+    var serial = new SerialManager();
+     serial.initSerial();
+    var stepqueue = serial.startSerial();
+
     game.start();
+    //game.startGameplay();  //debug
+
+
+    game.on('gameOver', function() {
+    	console.log(stepqueue.queue());
+        delete game;
+    });
 }
 
+ //setTimeout(runFakeGame, 1000);
 
 io.on('connection', function (socket) {
+   // console.log("connection");
     setTimeout(runFakeGame, 5000);
 });
 
