@@ -15,42 +15,30 @@ function GameplayViewController($el) {
     this.$el = $el;
 
     
-    var area = new AreaViz('#area-viz');
-    var balloon = new BalloonViz('#balloon-viz');
-    var stopwatch = new StopwatchViz('#stopwatch-viz', [[], []]);
+    this.area = new AreaViz('#area-viz');
+    this.balloon = new BalloonViz('#balloon-viz');
+    this.stopwatch = new StopwatchViz('#stopwatch-viz', [[], []]);
 
+    this.count = 0;
 
-    // send some fake step data
-    var count = 0;
-    var interval = setInterval(function() {
-        var nextX = Math.round(10 + (0.5 - Math.random()) * 5);
-        var nextY = Math.round(10 + (0.5 - Math.random()) * 5);
-
-        var newData = [nextX, nextY];
-
-        area.appendData([nextX]);
-        stopwatch.appendData(newData);
-        balloon.appendData(newData);
-        if(count >= 19) {
-            clearInterval(interval);
-        }
-        count++;
-    }, 1000);
-
-
-    // this.$el.html(htmlContent({
-    //     // template variables go here
-    //     // e.g.
-    //     //
-    //     // someVar: something
-    // }));
-
-
-    // maybe you want to instantiate a vizualization:
-    //
-    // new Viz(this.$el.find('.viz-selector'));
 }
 
 
-
 module.exports = GameplayViewController;
+
+
+GameplayViewController.prototype.step = function(data) {
+
+    console.log('STEPPING' + (this.count++));
+    // console.log(data);
+
+    // TODO - munge data once we decide how everything is transmitted / 
+    //        how we discern left and right player
+
+    var nextX = Math.round(10 + (0.5 - Math.random()) * 5);
+    var nextY = Math.round(10 + (0.5 - Math.random()) * 5);
+    var newData = [nextX, nextY];
+    this.area.appendData([nextX]);
+    this.stopwatch.appendData(newData);
+    this.balloon.appendData(newData);
+};

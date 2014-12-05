@@ -5,6 +5,8 @@ var _ = require('lodash');
 // var htmlContent = require('../../templates/includes/desktop-content.jade');
 // var Viz = require('../viz/viz');
 var path = require('path');
+var inherits = require('inherits');
+var EventEmitter = require('events').EventEmitter;
 
 var bulk = require('bulk-require');
 var templates = bulk(__dirname + '/../../../views/', [ '**/*.jade' ]);
@@ -14,6 +16,7 @@ var controllers = {
 };
 
 
+var SECONDS = 1000;
 var defaultSlideTime = 2000;
 
 
@@ -85,6 +88,8 @@ function SlideViewController($el) {
 
 
 
+inherits(SlideViewController, EventEmitter);
+
 SlideViewController.prototype.getScreen = function() {
     return states[this.state].screens[this.index];
 };
@@ -135,27 +140,26 @@ SlideViewController.prototype.setScreen = function() {
     var Controller = this.getController();
     if(Controller) {
         this.pageController = new Controller($('.inner-container'));
+    } else {
+        this.pageController = null;
     }
 
     var screenLength = states[this.state].screens.length;
 
-    if(this.index < screenLength - 1) {
-        var to = setTimeout(function() {
+    var to = setTimeout(function() {
+
+        if(self.index < screenLength - 1) {
             self.index++;
             self.setScreen();
-        }, s.duration || defaultSlideTime);
-
-        this.timeouts.push(to);
-    } else if(this.shouldLoop()) {
-        var to = setTimeout(function() {
+        } else if(self.shouldLoop()) {
             self.index = 0;
             self.setScreen();
-        }, s.duration || defaultSlideTime);
+        } else {
+            self.emit('stateEnded', {state: self.state});
+        }
+    }, s.duration || defaultSlideTime);
+    this.timeouts.push(to);
 
-        this.timeouts.push(to);
-    } else {
-        console.log('not setting anything');
-    }
 }
 
 
@@ -179,3 +183,7 @@ SlideViewController.prototype.destroy = function() {
 };
 
 module.exports = SlideViewController;
+
+
+
+
