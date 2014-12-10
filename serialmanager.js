@@ -42,10 +42,7 @@ SerialManager.prototype.startSerial = function() {
              serialPort.on('close', function(data) {
                 console.log('serial closed');
             });
-            // serialPort.write("ls\n", function(err, results) {
-            //     console.log('err ' + err);
-            //     console.log('results ' + results);
-            // });
+        
         }
      });
 
