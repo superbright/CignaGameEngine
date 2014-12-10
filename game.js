@@ -7,18 +7,22 @@ var _ = require('lodash');
 
 var gameTicks = 20;
 var tickLength = 1000;
+var stepbuffer;
+
+var GameModel = require('./models/gamemodel.js');
 
 
 /*
  * Game controller
  */
 
-function Game(io, players) {
+function Game(io, players,buffer) {
     
 
     this.players = players;
     this.numPlayers = players.length;
     this.io = io;
+    stepbuffer = buffer;
     // this.io.emit('setState', {state: 'screensaver'});
 
     this.stateIndex = -1;
@@ -41,6 +45,7 @@ Game.prototype._advanceState = function() {
         this.end();
     } else {
         this._setState();
+        //this.end(); //debug
     }
 };
 
@@ -70,7 +75,6 @@ Game.prototype._setState = function() {
 Game.prototype.startGameplay = function() {
 
     // read in serial stuffff.
-
     var self = this;
 
     // do 20 pings
@@ -81,6 +85,8 @@ Game.prototype.startGameplay = function() {
         });
 
         count++;
+        console.log('tick');
+        console.log(stepbuffer.len());
         if(count > gameTicks - 1) {
             clearInterval(interval);
             self.endGameplay();

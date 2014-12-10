@@ -7,10 +7,10 @@ var stepqueue = [];
  */
 
 function SerialQueue() {
-    
+  	this.stepqueue = [];
 }
 
-module.exports = SerialBuff;
+module.exports = SerialQueue;
 
 SerialQueue.prototype.push = function(data) {
     
@@ -30,4 +30,11 @@ SerialQueue.prototype.reset = function() {
 SerialQueue.prototype.len = function() {
     return stepqueue.length;
 };
+
+
+SerialQueue.prototype.queue = function() {
+    return stepqueue;
+};
+
+
 
