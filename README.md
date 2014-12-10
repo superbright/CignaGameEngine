@@ -41,8 +41,8 @@ Will expects a json object like
 `
 {
     "player": {
-        "name": "Matthew",
-        "email": "mpconlen@gmail.com"
+        "name": "name",
+        "email": "email@gmail.com"
     }
 }
 `
