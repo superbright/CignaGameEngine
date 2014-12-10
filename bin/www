@@ -18,15 +18,17 @@ var data = require('./data/dummy.json');
 var counter = 0;
 
 var runFakeGame = function() {
-    var game = new Game(io, [{
-        name: 'Matt'
-    }]);
+   
 
     console.log('run fake game'); 
 
     var serial = new SerialManager();
-     serial.initSerial();
+    serial.initSerial();
     var stepqueue = serial.startSerial();
+ 
+    var game = new Game(io, [{
+        name: 'Matt'
+    }],stepqueue);
 
     game.start();
     //game.startGameplay();  //debug

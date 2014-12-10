@@ -6,6 +6,8 @@ var SerialPort = require("serialport").SerialPort
 
 var SerialQeueu = require('./serialqeueu');
 var serialPort;
+var interval;
+var debugmode = false;
 /*
  * Serial controller
  */
@@ -22,7 +24,7 @@ SerialManager.prototype.initSerial = function() {
 
    serialPort = new SerialPort('/dev/tty.usbserial-A800f82q', {
         baudrate: 57600
-    });
+    },false);
 
     console.log('init serial');
 
@@ -35,9 +37,20 @@ SerialManager.prototype.startSerial = function() {
       console.log('open serial');  
        var queue = new SerialQeueu();
       serialPort.open(function(error) {
+       
         if (error) {
             console.log('failed to open: ' + error);
-            return false;
+            console.log('debug run');
+
+            debugmode = true;
+            
+        interval = setInterval( function() {
+            
+                  queue.push('l,30');
+                    
+        }, 200);
+
+
         } else {
             console.log('open');
             
@@ -49,7 +62,6 @@ SerialManager.prototype.startSerial = function() {
                 console.log('serial closed');
             });
 
-          
             // serialPort.write("ls\n", function(err, results) {
             //     console.log('err ' + err);
             //     console.log('results ' + results);
@@ -57,10 +69,14 @@ SerialManager.prototype.startSerial = function() {
         }
      });
 
-       return queue;
+    return queue;
 };
 
 SerialManager.prototype.stopSerial = function() {
+
+    if(debugmode) {
+         clearInterval(interval);
+    }
 
     serialport.close(function(error) {
         if(error) {
