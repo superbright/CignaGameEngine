@@ -12,22 +12,28 @@ var d3 = require('d3');
 /*
  * View controller
  */
-function Viz(selector, data, opts) {
+function Viz(selector, opts) {
     if (!(this instanceof Viz)) {
         return new Viz($el);
     }
 
     var $el = $(selector);
     this.$el = $el;
-    this.data = data;
     var self = this;
 
     // do some cool vizualization here
 
     opts = _.defaults(opts || {}, {
-        numPlayers: 1,
+        players: [],
         highScore: 250
     });
+
+    opts.numPlayers = opts.players.length;
+
+    this.data = [];
+    _.each(opts.players, function() {
+        self.data.push([]);
+    })
 
 
     var margin = {
@@ -292,6 +298,9 @@ Viz.prototype.updateArcs = function() {
 
 Viz.prototype.appendData = function(newData) {    
     var self = this;
+
+    console.log(this.data);
+    console.log(newData);
     _.each(newData, function(d, i) {
         self.data[i] = self.data[i].concat(d);
     });

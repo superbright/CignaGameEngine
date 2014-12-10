@@ -206,7 +206,7 @@ LineGraph.prototype.updateCircles = function() {
 
 LineGraph.prototype.appendData = function(data) {
     
-    this.data = this.data.concat(data);
+    this.data.push(data);
     data = this.data;
 
     // console.log(data);

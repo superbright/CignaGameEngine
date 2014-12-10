@@ -138,7 +138,7 @@ SlideViewController.prototype.shouldLoop = function() {
 };
 
 
-SlideViewController.prototype.setScreen = function() {
+SlideViewController.prototype.setScreen = function(data) {
 
     var self = this;
     var s = this.getScreen();
@@ -147,7 +147,7 @@ SlideViewController.prototype.setScreen = function() {
 
     var Controller = this.getController();
     if(Controller) {
-        this.pageController = new Controller($('.inner-container'));
+        this.pageController = new Controller($('.inner-container'), data.players);
     } else {
         this.pageController = null;
     }
@@ -171,7 +171,7 @@ SlideViewController.prototype.setScreen = function() {
 }
 
 
-SlideViewController.prototype.setState = function(state) {
+SlideViewController.prototype.setState = function(state, data) {
     this.state = state;
     this.index = 0;
 
@@ -180,7 +180,7 @@ SlideViewController.prototype.setState = function(state) {
     });
 
     this.timeouts = [];
-    this.setScreen();
+    this.setScreen(data);
 };
 
 

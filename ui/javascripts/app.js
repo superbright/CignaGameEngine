@@ -8,7 +8,7 @@ var SlideController = require('./views/slide-controller');
 var slideController = new SlideController($('.outer-container'));
 slideController.setState('screensaver');
 
-var socket = io.connect('http://localhost');
+var socket = io('/' + window.playerPosition);
 
 socket.on('step', _.debounce(function (data) {
     //socket.emit('my other event', { my: 'data' });
@@ -25,7 +25,7 @@ socket.on('step', _.debounce(function (data) {
 socket.on('setState', function(data) {
     console.log(data);
 
-    slideController.setState(data.state);
+    slideController.setState(data.state, data);
 });
 
 slideController.on('stateEnded', function(data) {

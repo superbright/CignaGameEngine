@@ -32,8 +32,6 @@ SerialManager.prototype.initSerial = function() {
 
 SerialManager.prototype.startSerial = function() {
 
-    return;
-
       console.log('open serial');  
        var queue = new SerialQeueu();
       serialPort.open(function(error) {
@@ -45,9 +43,7 @@ SerialManager.prototype.startSerial = function() {
             debugmode = true;
             
         interval = setInterval( function() {
-            
                   queue.push('l,30');
-                    
         }, 200);
 
 
@@ -78,7 +74,7 @@ SerialManager.prototype.stopSerial = function() {
          clearInterval(interval);
     }
 
-    serialport.close(function(error) {
+    serialPort.close(function(error) {
         if(error) {
             console.log('failed to close: ' + error);
         } else {
@@ -87,3 +83,9 @@ SerialManager.prototype.stopSerial = function() {
 
     });
 };
+
+SerialManager.prototype.getBuffers = function() {
+    // TODO:
+    // return an array of the serialqueue buffers
+    return [];
+}

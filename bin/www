@@ -14,37 +14,29 @@ var server = app.listen(app.get('port'), function() {
 var io = require('socket.io')(server);
 var data = require('./data/dummy.json');
 
+var leftIO = io.of('/left');
+var rightIO = io.of('/right');
 
-var counter = 0;
+var gameManager = require('../game-manager');
+gameManager.setChannels([leftIO, rightIO]);
+
 
 var runFakeGame = function() {
+   gameManager.addPlayer({
+    name: 'player 1'
+   });
    
+   gameManager.addPlayer({
+    name: 'player 2'
+   });
 
-    console.log('run fake game'); 
-
-    var serial = new SerialManager();
-    serial.initSerial();
-    var stepqueue = serial.startSerial();
- 
-    var game = new Game(io, [{
-        name: 'Matt'
-    }],stepqueue);
-
-    game.start();
-    //game.startGameplay();  //debug
-
-
-    game.on('gameOver', function() {
-    	console.log(stepqueue.queue());
-        delete game;
-    });
+   gameManager.startGame();
 }
 
- //setTimeout(runFakeGame, 1000);
 
-io.on('connection', function (socket) {
-   // console.log("connection");
-    setTimeout(runFakeGame, 5000);
+leftIO.on('connection', function (socket) {
+   console.log("left connection");
+    // setTimeout(runFakeGame, 5000);
 });
 
 

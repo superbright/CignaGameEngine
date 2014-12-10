@@ -46,6 +46,18 @@ a {
   display: none;
 }
 
+.choose-sides {
+  
+  text-align: center;
+  @include vertical-align;
+  
+  h1 {
+    a {
+      color: white;
+      font-family: $sans-serif;
+    }
+  }
+}
 
 .footer {
   position: absolute;

@@ -21,14 +21,14 @@ function Viz(selector, opts) {
     this.$el = $el;
 
     opts = _.defaults(opts || {}, {
-        numPlayers: 2,
+        players: [],
         highScore: 250
     });
 
     var width = Math.min($el.width(), 600);
     var height = Math.min(width / Math.sqrt(2), 0.7 * $(document).height());
 
-    var numPlayers = opts.numPlayers;
+    var numPlayers = opts.players.length;
     var highScore = opts.highScore;
 
     var scores = Array.apply(null, new Array(numPlayers)).map(Number.prototype.valueOf, 0);
