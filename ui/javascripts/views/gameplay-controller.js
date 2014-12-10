@@ -19,6 +19,10 @@ function GameplayViewController($el) {
     this.balloon = new BalloonViz('#balloon-viz');
     this.stopwatch = new StopwatchViz('#stopwatch-viz', [[], []]);
 
+    this.$messageEl = $('.message-container .message');
+    this.$boostEl = $('.boost');
+    this.$timerEl = $('.timer-container');
+
     this.count = 0;
 
 }
@@ -26,10 +30,26 @@ function GameplayViewController($el) {
 
 module.exports = GameplayViewController;
 
+GameplayViewController.prototype.setMessage = function(msg) {
+    this.$messageEl.text(msg);
+};
+
+GameplayViewController.prototype.setBoostState = function(state) {
+    this.$boostEl.addClass(state);
+};
+
+GameplayViewController.prototype.setTimerDisplay = function(seconds) {
+    var formatted = '0:' + (seconds < 10 ? '0' + seconds : seconds);
+    setTimeout(function() {
+        this.$timerEl.text(formatted);    
+    }, 1000);  
+};
 
 GameplayViewController.prototype.step = function(data) {
 
     console.log('STEPPING' + (this.count++));
+
+    this.setTimerDisplay(20 - this.count);
     // console.log(data);
 
     // TODO - munge data once we decide how everything is transmitted / 

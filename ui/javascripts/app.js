@@ -6,7 +6,7 @@ var _ = require('lodash');
 
 var SlideController = require('./views/slide-controller');
 var slideController = new SlideController($('.outer-container'));
-
+slideController.setState('screensaver');
 
 var socket = io.connect('http://localhost');
 

@@ -20,6 +20,10 @@ router.get('/starting/:id', function(req, res) {
   res.render('starting/' + req.params.id, { title: 'Express' });
 });
 
+// router.get('/:cat/:id', function(req, res) {
+//   res.render(req.params.cat + '/' + req.params.id, { title: 'Express' });
+// });
+
 router.get('/playground', function(req, res) {
   res.render('playground', { title: 'Express' });
 });

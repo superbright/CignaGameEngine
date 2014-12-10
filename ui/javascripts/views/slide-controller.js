@@ -17,16 +17,22 @@ var controllers = {
 
 
 var SECONDS = 1000;
-var defaultSlideTime = 2000;
+var defaultSlideTime = 3000;
 
 
 var states = {
 
     screensaver: {
         screens: [{
+            template: 'screensaver/big-cigna'
+        }, {
+            template: 'screensaver/dual-logo'
+        }, {
             template: 'screensaver/step-up'
         }, {
             template: 'screensaver/win'
+        }, {
+            template: 'screensaver/leaderboard'
         }],
 
         loop: true
@@ -69,6 +75,8 @@ var states = {
         screens: [{
             template: 'finishing/finish'
         }, {
+            template: 'finishing/way-to-go'
+        }, {
             template: 'finishing/leaderboard'
         }],
         loop: false
@@ -86,7 +94,6 @@ function SlideViewController($el) {
     this.$el = $el;
     this.timeouts = [];
 }
-
 
 
 inherits(SlideViewController, EventEmitter);

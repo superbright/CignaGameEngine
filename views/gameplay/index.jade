@@ -3,12 +3,27 @@ extends ../layouts/top-logos
 
 block append content
 
+    .timer-container
+        | 0:20
+
+    .boost-container
+        .boost-button
+
     .balloon.viz-holder
+        .gameicon.run
         #balloon-viz
+
+    .divider.first
     
     .stopwatch.viz-holder
         #stopwatch-viz
 
+    .divider.second
+
     .area.viz-holder
+        .gameicon.speed
         #area-viz
 
+    .message-container
+        .message
+            | YO

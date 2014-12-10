@@ -1,14 +1,87 @@
 
+
+
+
+
 .screensaver-container {
 
-    font-family: $sans-serif;
-    text-align: center;
-    @include vertical-align;
+    // font-family: $sans-serif;
+    // text-align: center;
+    // @include vertical-align;
+    width: 100%;
+    height: 100%;
+
+    .big-cigna {
+        background-size: contain;
+        width: 75%;
+        height: 75%;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 10%;
+        left: 12.5%;
+        right: 12.5%;
+        background-image: url(/images/cigna-tag.png);
+    }
 
     .headline {
-        text-align: center;
-        color: white;    
-        font-size: 48px;
+        background-size: contain;
+        width: 50%;
+        height: 13%;
+        background-repeat: no-repeat;
+        position: absolute;
+        bottom: 55%;
+        left: 25%;
+        right: 25%;
+
+        &.step-up {
+            background-image: url(/images/banners/step-up.png);
+            bottom: 48%;
+        }
+
+        &.win-tickets {
+            background-image: url(/images/banners/win-tickets.png);
+            bottom: 50%;
+        }
+        &.leaderboard {
+            background-image: url(/images/banners/leaderboard.png);
+            bottom: 44%;
+            width: 50%;
+            height: 19%;
+        }
+
+    }
+
+    .image {
+
+        background-size: contain;
+        width: 16%;
+        height: 13%;
+        background-repeat: no-repeat;
+        position: absolute;
+        bottom: 17%;
+        left: 42%;
+        right: 42%;
+
+
+        &.shoes {
+            background-image: url(/images/shoes.png);
+            height: 28%;
+            width: 12%;
+            left: 44%;
+            right: 44%;
+        }
+        &.win-tickets {
+            background-image: url(/images/tickets.png);
+            height: 28%;
+        }
+        &.leaderboard {
+            background-image: url(/images/leaderboard.png);
+            width: 30%;
+            height: 25%;
+            bottom: 17%;
+            left: 35%;
+            right: 35%;
+        }
     }
 
 

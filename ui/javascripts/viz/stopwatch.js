@@ -12,7 +12,7 @@ var d3 = require('d3');
 /*
  * View controller
  */
-function Viz(selector, data) {
+function Viz(selector, data, opts) {
     if (!(this instanceof Viz)) {
         return new Viz($el);
     }
@@ -23,6 +23,12 @@ function Viz(selector, data) {
     var self = this;
 
     // do some cool vizualization here
+
+    opts = _.defaults(opts || {}, {
+        numPlayers: 1,
+        highScore: 250
+    });
+
 
     var margin = {
         top: 0,
@@ -43,8 +49,13 @@ function Viz(selector, data) {
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 
+
     var opponentArcSize = [0.93 * width / 2, width / 2];
     var myArcSize = [0.80 * width / 2, 0.86 * width / 2];
+
+    if(opts.numPlayers === 1) {
+        myArcSize = opponentArcSize;
+    }
 
 
 
@@ -87,89 +98,109 @@ function Viz(selector, data) {
         .attr('transform', 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
 
 
-
-
-
-
-
-
-    
-    // competitor circles
-
-    var myCircleG = svg.append('g')
-        .attr('class', 'me')
-        .attr('transform', 'translate(' + (width / 2) + ', ' + ((width / 2) - 100) + ')');
-
-    myCircleG.append('circle')
-        // .attr('class', 'me')
-        .attr('fill', 'url(#player-gradient)')
-        .attr('r', width / 4 - 25);
-
-    myCircleG
-        .append('text')
-        .attr('class', 'player-name')
-        .attr('text-anchor', 'middle')
-        .attr('dy', -25)
-        .text('MATTHEW');
-    
-    myCircleG
-        .append('text')
-        .attr('class', 'score')
-        .attr('text-anchor', 'middle')
-        .attr('dy', 35)
-        .text('0');
-
-
-    var opponentCircleG = svg.append('g')
-        .attr('class', 'competitor')
-        .attr('transform', 'translate(' + (width / 2) + ', ' + ((width / 2) + 125) + ')');
-
-
-    opponentCircleG.append('circle')
-        // .attr('class', 'competitor')
-        .attr('fill', 'url(#player-gradient)')
-        .attr('r', width / 6 - 25);
-        
-    opponentCircleG
-        .append('text')
-        .attr('class', 'player-name')
-        .attr('text-anchor', 'middle')
-        .attr('dy', -25)
-        .text('OPPONENT');
-    
-    opponentCircleG
-        .append('text')
-        .attr('class', 'score')
-        .attr('text-anchor', 'middle')
-        .attr('dy', 25)
-        .text('0');
-
-
-    // opponent arc
-    this.opponentArc = d3.svg.arc()
-        .innerRadius(opponentArcSize[0])
-        .outerRadius(opponentArcSize[1])
-        .startAngle(0);
-
-    this.opponentPlaceholderPath = svg.append("path")
-        .datum({endAngle: 2 * Math.PI})
-        .attr("d", this.opponentArc)
-        .attr('class', 'opponent-placeholder')
-        .attr("transform", 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
-
-    this.opponentPath = svg.append("path")
-        .datum({endAngle: 0})
-        .attr("d", this.opponentArc)
-        .attr('class', 'opponent')
-        .attr("transform", 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
-
-
-    // opponent arc
+    // my arc
     this.myArc = d3.svg.arc()
         .innerRadius(myArcSize[0])
         .outerRadius(myArcSize[1])
         .startAngle(0);
     
+
+    if(opts.numPlayers > 1) {
+
+        var myCircleG = svg.append('g')
+            .attr('class', 'me')
+            .attr('transform', 'translate(' + (width / 2) + ', ' + ((width / 2) - 100) + ')');
+
+        myCircleG.append('circle')
+            // .attr('class', 'me')
+            .attr('fill', 'url(#player-gradient)')
+            .attr('r', width / 4 - 25);
+
+        myCircleG
+            .append('text')
+            .attr('class', 'player-name')
+            .attr('text-anchor', 'middle')
+            .attr('dy', -25)
+            .text('MATTHEW');
+        
+        myCircleG
+            .append('text')
+            .attr('class', 'score')
+            .attr('text-anchor', 'middle')
+            .attr('dy', 35)
+            .text('0');
+
+        var opponentCircleG = svg.append('g')
+            .attr('class', 'competitor')
+            .attr('transform', 'translate(' + (width / 2) + ', ' + ((width / 2) + 125) + ')');
+
+
+        opponentCircleG.append('circle')
+            // .attr('class', 'competitor')
+            .attr('fill', 'url(#player-gradient)')
+            .attr('r', width / 6 - 25);
+            
+        opponentCircleG
+            .append('text')
+            .attr('class', 'player-name')
+            .attr('text-anchor', 'middle')
+            .attr('dy', -25)
+            .text('OPPONENT');
+        
+        opponentCircleG
+            .append('text')
+            .attr('class', 'score')
+            .attr('text-anchor', 'middle')
+            .attr('dy', 25)
+            .text('0');
+
+
+        // opponent arc
+        this.opponentArc = d3.svg.arc()
+            .innerRadius(opponentArcSize[0])
+            .outerRadius(opponentArcSize[1])
+            .startAngle(0);
+
+        this.opponentPlaceholderPath = svg.append("path")
+            .datum({endAngle: 2 * Math.PI})
+            .attr("d", this.opponentArc)
+            .attr('class', 'opponent-placeholder')
+            .attr("transform", 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
+
+        this.opponentPath = svg.append("path")
+            .datum({endAngle: 0})
+            .attr("d", this.opponentArc)
+            .attr('class', 'opponent')
+            .attr("transform", 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
+    } else {
+
+        var myG = svg.append('g')
+            .attr('class', 'me')
+            .attr('transform', 'translate(' + (width / 2) + ', ' + ((width / 2)) + ')');
+
+        myG
+            .append('text')
+            .attr('class', 'player-name solo')
+            .attr('text-anchor', 'middle')
+            .attr('dy', -25)
+            .text('MATTHEW');
+        
+        myG
+            .append('text')
+            .attr('class', 'score solo')
+            .attr('text-anchor', 'middle')
+            .attr('dy', 70)
+            .text('0');
+
+        svg.append("path")
+            .datum({endAngle: 2 * Math.PI})
+            .attr("d", this.myArc)
+            .attr('class', 'opponent-placeholder')
+            .attr("transform", 'translate(' + (width / 2) + ', ' + (width / 2) + ')');
+
+    }
+
+
     this.myPath = svg.append("path")
         .datum({endAngle: 0})
         .attr("d", this.myArc)

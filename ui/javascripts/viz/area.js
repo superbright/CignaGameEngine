@@ -4,9 +4,9 @@ var _ = require('lodash');
 
 var margin = {
     top: 30,
-    right: 35,
+    right: 0,
     bottom: 25,
-    left: 30
+    left: 35
 };
 
 

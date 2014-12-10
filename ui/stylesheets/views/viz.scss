@@ -1,22 +1,115 @@
 
 
+.boost-button {
+    background-size: contain;
+    width: 16%;
+    height: 75%;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 14%;
+    left: 42%;
+    right: 42%;
+    background-image: url(/images/buttons/boost.png);
+
+    &.using {
+        background-image: url(/images/buttons/boost-using.png);
+    }    
+
+    &.used {
+        background-image: url(/images/buttons/boost-used.png);        
+    }
+}
+
+
+.divider {
+    background-size: contain;
+    width: 3px;
+    height: 75%;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 14%;
+
+    &.first {
+        left: 33%;
+    }
+    &.second {
+        left: 66%;
+    }
+    
+    background-image: url(/images/divider.png);
+}
+
+.message-container {
+    width: 90%;
+    left: 5%;
+    position: absolute;
+    bottom: 5%;
+    height: 10%;
+    background-color: white;
+    border-radius: 5px;
+
+    // padding: 5px 10px;
+
+    .message {
+        color: #fa4e0a;
+        font-size: 4em;
+        text-align: center;
+    } 
+}
+
+.timer-container {
+    font-size: 7em;
+    color: white;
+    text-align: center;
+}
 
 .viz-holder {
+
+
+
+
     position: absolute;
     width: 33%;
     top: 20%;
 
     &.balloon {
-        left: 0;
+        width: 24%;
+        left: 5%;
+        top: 30%;
     }
 
     &.stopwatch {
-        left: 34%;
+        width: 28%;
+        left: 36%;
+        top: 25%;
     }
 
     &.area {
-        right: 0;
-        top: 26%;
+        width: 28%;
+        right: 5%;
+        top: 30%;
+    }
+
+    .gameicon {
+        background-size: contain;
+        width: 20%;
+        height: 75%;
+        background-repeat: no-repeat;
+        position: absolute;
+        top: 0;
+        left: 42%;
+        right: 42%;
+
+        &.speed {
+            width: 40%;
+            height: 35%;
+            left: 35%;
+            right: 30%;
+            background-image: url(/images/icons/gameplay-speed.png);
+        }
+        &.run {
+            background-image: url(/images/icons/gameplay-run.png);
+        }
     }
 }
 
@@ -66,8 +159,8 @@ svg {
 
                 text {
                     font-family: $sans-serif;
-                    font-weight: bold;
-                    font-size: 28px;
+                    // font-weight: bold;
+                    font-size: 1.2em;
                 }
 
                 &:nth-child(1) {
@@ -96,10 +189,10 @@ svg {
         }
 
         text {
-            font-size: 36px;
+            font-size: 2em;
             fill: white;
             font-family: $sans-serif;
-            font-weight: bold;
+            // font-weight: bold;
         }
 
         circle {
@@ -163,13 +256,17 @@ svg {
 
             text {
                 fill: $orange;
-                font-weight: bold;
+                // font-weight: bold;
 
                 &.player-name {
                     font-size: 36px;
                 }
                 &.score {
-                    font-size: 64px;   
+                    font-size: 4.5em;   
+
+                    &.solo {
+                        font-size: 7em
+                    }
                 }
             }
         }
@@ -181,7 +278,7 @@ svg {
 
             text {
                 fill: $blue;
-                font-weight: bold;
+                // font-weight: bold;
 
                 &.player-name {
                     font-size: 18px;

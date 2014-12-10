@@ -30,6 +30,8 @@ SerialManager.prototype.initSerial = function() {
 
 SerialManager.prototype.startSerial = function() {
 
+    return;
+
       console.log('open serial');  
        var queue = new SerialQeueu();
       serialPort.open(function(error) {

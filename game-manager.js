@@ -1,7 +1,7 @@
 
 var players = [];
-var currentGame = null;
 var Game = require('./game');
+var game = null;
 
 
 /*
@@ -26,7 +26,7 @@ GameManager.prototype.addPlayer = function(player) {
 
 GameManager.prototype.startGame = function() {
 
-    var game = new Game(players);
+    game = new Game(players);
     game.on('gameOver', function() {
         game = null;
     });
