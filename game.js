@@ -27,7 +27,6 @@ function Game(namespaces, players, buffers) {
     // either [leftBuffer] or [leftBuffer, rightBuffer]
     stepbuffers = buffers;
 
-
     this.ioChannels = [];
     this.ioChannels.push(namespaces[0]);
     if(this.numPlayers > 1) {
@@ -100,7 +99,6 @@ Game.prototype._setState = function() {
             });
         });
     });
-
 };
 
 Game.prototype.startGameplay = function() {
