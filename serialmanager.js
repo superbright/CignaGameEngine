@@ -43,7 +43,7 @@ SerialManager.prototype.startSerial = function() {
             debugmode = true;
             
         interval = setInterval( function() {
-                  queue.push('l,30');
+                  queue.push('1l,30');
         }, 200);
 
 
@@ -70,7 +70,7 @@ SerialManager.prototype.startSerial = function() {
 
 SerialManager.prototype.stopSerial = function() {
 
-    if(debugmode) {
+    if(debugmode || interval) {
          clearInterval(interval);
     }
 
@@ -80,12 +80,5 @@ SerialManager.prototype.stopSerial = function() {
         } else {
             console.log('close')
         }
-
     });
 };
-
-SerialManager.prototype.getBuffers = function() {
-    // TODO:
-    // return an array of the serialqueue buffers
-    return [];
-}

@@ -32,3 +32,9 @@ slideController.on('stateEnded', function(data) {
     console.log('stateEnded');
     socket.emit('stateEnded', data);
 });
+
+socket.on('boost', function() {
+    if(slideController.pageController) {
+        slideController.pageController.boost();
+    }
+});

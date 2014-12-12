@@ -4,6 +4,7 @@ var utils = require('../utilities');
 var gameManager = require('../game-manager');
 var mongoose = require('mongoose');
 var GameModel = mongoose.model('GameModel');
+var HighScoreGameModel = mongoose.model('HighScoreGameModel');
 
 
 /* GET home page. */
@@ -20,6 +21,9 @@ router.get('/right', function(req, res) {
 });
 
 router.post('/add-player', function(req, res) {
+
+  console.log('adding player');
+  console.log(req.body.player);
   gameManager.addPlayer(req.body.player);
   res.status(200).send();
 });
@@ -34,6 +38,18 @@ router.post('/clear-players', function(req, res) {
   res.status(200).send();
 });
 
+router.get('/top-scores', function(req, res) {
+  
+  HighScoreGameModel
+    .find()
+    .limit(75)
+    .sort('-score')
+    .select('player score')
+    .exec(function(err, games) {
+      console.log(games)
+      res.json(games);
+    });
+});
 
 router.get('/stats/:gid/:position', function(req, res) {
   GameModel.findById(req.params.gid, function(err, game) {
@@ -65,7 +81,6 @@ router.get('/screenshot', function(req, res) {
 
       
 });
-
 
 
 module.exports = router;

@@ -12,7 +12,8 @@ var bulk = require('bulk-require');
 var templates = bulk(__dirname + '/../../../views/', [ '**/*.jade' ]);
 
 var controllers = {
-    'gameplay-controller': require('./gameplay-controller')
+    'gameplay-controller': require('./gameplay-controller'),
+    'leaderboard-controller': require('./leaderboard-controller')
 };
 
 
@@ -24,18 +25,22 @@ var states = {
 
     screensaver: {
         screens: [{
-            template: 'screensaver/big-cigna'
+            template: 'screensaver/big-cigna',
+            duration: 4000
         }, {
-            template: 'screensaver/dual-logo'
+            template: 'screensaver/dual-logo',
+            duration: 4000
         }, {
-            template: 'screensaver/step-up'
+            template: 'screensaver/step-up',
+            duration: 4000
         }, {
-            template: 'screensaver/win'
+            template: 'screensaver/win',
+            duration: 4000
         }, {
-            template: 'screensaver/leaderboard'
+            template: 'screensaver/leaderboard',
+            duration: 4000
         }],
-
-        loop: true
+        loop: false
     },
 
     instructions: {
@@ -77,7 +82,9 @@ var states = {
         }, {
             template: 'finishing/way-to-go'
         }, {
-            template: 'finishing/leaderboard'
+            template: 'finishing/leaderboard',
+            controller: 'leaderboard-controller',
+            duration: 4000
         }],
         loop: false
     }
@@ -119,15 +126,20 @@ SlideViewController.prototype.getTemplate = function() {
 
 
 SlideViewController.prototype.getController = function() {
+    console.log('getting controller');
     var controllerString = states[this.state].screens[this.index].controller;
     if(!controllerString) {
         return;
     }
 
+
+    console.log(controllerString);
     var controller = controllers;
     _.each(controllerString.split('/'), function(str) {
         controller = controller[str];
     });
+
+    console.log(controller);
 
     return controller;
 };
@@ -147,7 +159,8 @@ SlideViewController.prototype.setScreen = function(data) {
 
     var Controller = this.getController();
     if(Controller) {
-        this.pageController = new Controller($('.inner-container'), data.players);
+        console.log('Controller');
+        this.pageController = new Controller($('.inner-container'), data);
     } else {
         this.pageController = null;
     }
@@ -158,10 +171,10 @@ SlideViewController.prototype.setScreen = function(data) {
 
         if(self.index < screenLength - 1) {
             self.index++;
-            self.setScreen();
+            self.setScreen(data);
         } else if(self.shouldLoop()) {
             self.index = 0;
-            self.setScreen();
+            self.setScreen(data);
         } else {
             self.emit('stateEnded', {state: self.state});
         }

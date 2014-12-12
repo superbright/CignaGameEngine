@@ -1,6 +1,6 @@
+    
 
-
-var stepqueue = [];
+// var stepqueue = [];
 
 /*
  * Serial Buffer
@@ -14,26 +14,26 @@ module.exports = SerialQueue;
 
 SerialQueue.prototype.push = function(data) {
     
-    stepqueue.push(data);
+    this.stepqueue.push(data);
 
 };
 
 SerialQueue.prototype.pop = function() {
 
-    stepqueue.shift();
+    this.stepqueue.shift();
 };
 
 SerialQueue.prototype.reset = function() {
-    stepqueue = [];
+    this.stepqueue = [];
 };
 
 SerialQueue.prototype.len = function() {
-    return stepqueue.length;
+    return this.stepqueue.length;
 };
 
 
 SerialQueue.prototype.queue = function() {
-    return stepqueue;
+    return this.stepqueue;
 };
 
 

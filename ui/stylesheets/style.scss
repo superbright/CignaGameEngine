@@ -156,7 +156,7 @@ a {
 }
 
 .center-container {
-  max-width: 70%;
+  max-width: 75%;
   margin: 0 auto;
 
   .big-list {
@@ -169,8 +169,8 @@ a {
       li {
         display: block;
         color: white;
-        font-size: 2.5em;
-        line-height: 2em;
+        font-size: 4em;
+        line-height: 2.5em;
         margin-bottom: 0;
 
         &:before {
@@ -209,7 +209,7 @@ a {
 
 .top-half-logo {
   position: absolute;
-  top: 5%;
+  top: 11%;
   left: 25%;
   right: 25%;
   background-image: url(/images/cigna-big.png);
@@ -220,7 +220,7 @@ a {
 }
 .bottom-half-logo {
   position: absolute;
-  bottom: 5%;
+  bottom: 17%;
   left: 25%;
   right: 25%;
   background-image: url(/images/steps-big.png);
@@ -236,10 +236,12 @@ a {
   right: 0;
   top: 0;
   bottom: 0;
+  overflow: hidden;
 
   .inner-container {
     width: 100%;
     height: 100%;
+    overflow: hidden;
   }
 }
 
@@ -257,7 +259,20 @@ a {
   }
   
   h1 {
-    font-size: 13em;
+    font-size: 26em;
+  }
+
+  &.number {
+
+    h1 {
+      font-size: 60em;
+    }
+  }
+  &.way-to-go {
+
+    h1 {
+      font-size: 18em;
+    }
   }
 }
 
@@ -273,6 +288,7 @@ a {
 }
 
 @import "views/viz";
+@import "views/leaderboard";
 @import "views/screensaver";
 @import "mobile";
 

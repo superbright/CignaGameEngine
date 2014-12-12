@@ -7,12 +7,16 @@ var StopwatchViz = require('../viz/stopwatch');
 /*
  * View controller
  */
-function GameplayViewController($el, players) {
+function GameplayViewController($el, data) {
     if (!(this instanceof GameplayViewController)) {
-        return new GameplayViewController($el);
+        return new GameplayViewController($el, data);
     }
 
+    console.log(data);
+
     this.$el = $el;
+    var players = data.players;
+    var highscore = data.highscore;
     this.players = players;
 
     console.log('initializing with players');
@@ -21,7 +25,8 @@ function GameplayViewController($el, players) {
     this.area = new AreaViz('#area-viz');
     
     this.balloon = new BalloonViz('#balloon-viz', {
-        players: players
+        players: players,
+        highscore: highscore
     });
 
     this.stopwatch = new StopwatchViz('#stopwatch-viz', {
@@ -33,6 +38,12 @@ function GameplayViewController($el, players) {
     this.$timerEl = $('.timer-container');
 
     this.count = 0;
+
+    if(window.playerPosition === 'left') {
+        this.setMessage(this.players[0].firstName || 'Matthew');
+    } else if (window.playerPosition === 'left' && this.players.length > 1) {
+        this.setMessage(this.players[1].firstName || 'Right Player');
+    }
 
 }
 
@@ -51,9 +62,18 @@ GameplayViewController.prototype.setTimerDisplay = function(seconds) {
     var self = this;
     var formatted = '0:' + (seconds < 10 ? '0' + seconds : seconds);
     setTimeout(function() {
-        self.$timerEl.text(formatted);    
-    }, 1000);  
+        self.$timerEl.text(formatted);
+    }, 1000);
 };
+
+GameplayViewController.prototype.boost = function() {
+    this.setBoostState('using');
+
+    var self = this;
+    setTimeout(function() {
+        self.setBoostState('used');
+    }, 3000);
+}
 
 GameplayViewController.prototype.step = function(data) {
 

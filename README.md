@@ -29,7 +29,6 @@ you try to add more than two players or if there is already a game in progress.
 Start the game! Uses previously added players.
 
 
-
 ### API
 
 Both of those methods are callable via an API

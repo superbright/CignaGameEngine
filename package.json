@@ -45,6 +45,7 @@
     "gulp-util": "^3.0.1",
     "inherits": "^2.0.1",
     "jadeify": "^3.0.0",
+    "superagent": "^0.21.0",
     "tiny-lr": "^0.1.4"
   }
 }

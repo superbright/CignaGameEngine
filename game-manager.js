@@ -42,19 +42,20 @@ GameManager.prototype.startGame = function() {
     }
 
     serial.initSerial();
+    var stepqueue;
 
-    var game = new Game(this.ioChannels, players, serial.getBuffers());
+    var game = new Game(this.ioChannels, players, serial);
     game.start();
     var self = this;
 
     // Start the 20 seconds of running!
     game.on('gameplayStarted', function() {
-        // stepqueue = serial.startSerial();
+        stepqueue = serial.startSerial();
     });
 
     // The twenty seconds is over.
     game.on('gameplayEnded', function() {
-        // serial.stopSerial();
+        serial.stopSerial();
     });
 
     // This is after the leaderboard screens, etc. have cleared.

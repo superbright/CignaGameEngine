@@ -22,17 +22,17 @@ function Viz(selector, opts) {
 
     opts = _.defaults(opts || {}, {
         players: [],
-        highScore: 250
+        highscore: 250
     });
 
     var width = Math.min($el.width(), 600);
     var height = Math.min(width / Math.sqrt(2), 0.7 * $(document).height());
 
     var numPlayers = opts.players.length;
-    var highScore = opts.highScore;
+    var highscore = opts.highscore;
 
     var scores = Array.apply(null, new Array(numPlayers)).map(Number.prototype.valueOf, 0);
-    scores = [highScore].concat(scores);
+    scores = [highscore].concat(scores);
 
     console.log(scores);
 
@@ -280,7 +280,7 @@ Viz.prototype.appendData = function(data) {
 
     // console.log(data);
 
-    if(data.length >= 2) {
+    if(this.data.length > 2) {
         // opponent
         this.data[1] = this.data[1] + data[1];
         // you

@@ -302,7 +302,9 @@ Viz.prototype.appendData = function(newData) {
     console.log(this.data);
     console.log(newData);
     _.each(newData, function(d, i) {
-        self.data[i] = self.data[i].concat(d);
+        if(self.data[i]) {
+            self.data[i] = self.data[i].concat(d);
+        }
     });
 
     this.updateArcs();

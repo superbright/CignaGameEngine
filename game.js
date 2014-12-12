@@ -4,11 +4,12 @@ var EventEmitter = require('events').EventEmitter;
 var _ = require('lodash');
 var mongoose = require('mongoose');
 var GameModel = mongoose.model('GameModel');
+var HighScoreGameModel = mongoose.model('HighScoreGameModel');
 
 
 var gameTicks = 20;
 var tickLength = 1000;
-var stepbuffers;
+var serial;
 
 var gameModel;
 
@@ -17,15 +18,20 @@ var gameModel;
  * Game controller
  */
 
-function Game(namespaces, players, buffers) {
+function Game(namespaces, players, s) {
     
 
     this.players = players;
     this.numPlayers = players.length;
 
+    serial = s;
+
+    console.log('starting game with players');
+    console.log(players);
+
     // take an array of buffers
     // either [leftBuffer] or [leftBuffer, rightBuffer]
-    stepbuffers = buffers;
+    // stepbuffer = buffer;
 
     this.ioChannels = [];
     this.ioChannels.push(namespaces[0]);
@@ -66,16 +72,28 @@ Game.prototype._setState = function() {
     var self = this;
     this.finishCount = 0;
 
+    var self = this;
+
     console.log('set state ' + state);
 
     if(state === 'gameplay') {        
 
-        _.each(this.ioChannels, function(nsp) {
-            nsp.emit('setState', {
-                state: state,
-                players: self.players
+        HighScoreGameModel
+            .findOne()
+            .sort('-score')
+            .select('player score')
+            .exec(function(err, game) {
+              console.log(game);
+
+                _.each(self.ioChannels, function(nsp) {
+                    nsp.emit('setState', {
+                        state: state,
+                        players: self.players,
+                        highscore: game.score
+                    });
+                });
             });
-        });
+
 
         return this.startGameplay();
     }
@@ -108,9 +126,44 @@ Game.prototype.startGameplay = function() {
 
     this.emit('gameplayStarted');
 
+    buffer = serial.startSerial();
+
     // do 20 pings
     var count = 0;
     var interval = setInterval(function() {
+
+
+
+        console.log(buffer.queue());
+
+        var bufferData = buffer.queue();
+        buffer.reset();
+
+        var leftPlayerData = [];
+        var rightPlayerData = [];
+
+        _.each(bufferData, function(d) {
+
+            console.log(d);
+            var dData = d.split(',');
+            var strength = dData[1];
+            console.log(dData);
+            if(strength == 200) {
+                return;
+            }
+
+            var player = dData[0][0];
+            if(player == 1) {
+                leftPlayerData.push(dData[0][1] + ',' + strength);
+            } else {
+                rightPlayerData.push(dData[0][1] + ',' + strength);
+            }
+        });
+
+        console.log('leftPlayerData');
+        console.log(leftPlayerData);
+        console.log('rightPlayerData');
+        console.log(rightPlayerData);
 
         // read in data from the buffer
         //
@@ -121,21 +174,21 @@ Game.prototype.startGameplay = function() {
         // });
 
         // fake data. uncomment above for real data
-        var data = [];
-        _.each(self.players, function() {
-            data.push(Math.round((Math.random() - 0.5) * 10 + 10));
-        });
+        // var data = [];
+        // _.each(self.players, function() {
+        //     data.push(Math.round((Math.random() - 0.5) * 10 + 10));
+        // });
 
         // Add real data to the database model
-        gameModel.data.left.steps = gameModel.data.left.steps.concat([data[0]]);
-        if(data.length > 1) {
-            gameModel.data.right.steps = gameModel.data.right.steps.concat([data[1]]);
+        gameModel.data.left.steps = gameModel.data.left.steps.concat(leftPlayerData);
+        if(self.numPlayers > 1) {
+            gameModel.data.right.steps = gameModel.data.right.steps.concat(rightPlayerData);
         }
 
-        console.log('pushing data: ' + data);
+        console.log('pushing data: ' + [leftPlayerData.length, rightPlayerData.length]);
         _.each(self.ioChannels, function(nsp) {
             nsp.emit('step', {
-                data: data
+                data: [leftPlayerData.length, rightPlayerData.length]
             });
         });
 
@@ -155,6 +208,29 @@ Game.prototype.endGameplay = function() {
     this.emit('gameplayEnded');
 
     console.log(gameModel);
+
+
+    var leftPlayerGame = new HighScoreGameModel({
+        player: _.omit(this.players[0], 'email'),
+        score: Math.round(Math.random() * 30 + 165)
+    });
+
+    leftPlayerGame.save();
+
+    if(this.players.length > 1) {
+
+        var rightPlayerGame = new HighScoreGameModel({
+            player: _.omit(this.players[1], 'email'),
+            score: Math.round(Math.random() * 30 + 165)
+        });
+
+        rightPlayerGame.save();
+    }
+
+    // todo - set winner
+    gameModel.winner = 'left'; // or 'right'
+    gameModel.topscore = Math.random() * 30 + 165;
+
     
     gameModel.save(function(err) {
     });
@@ -174,6 +250,7 @@ Game.prototype.clientCompleted = function() {
 
 Game.prototype.start = function() {
     gameModel = new GameModel();
+    gameModel.players = this.players;
     this._advanceState();
 };
 

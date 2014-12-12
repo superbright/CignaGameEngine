@@ -17,7 +17,7 @@
         height: 75%;
         background-repeat: no-repeat;
         position: absolute;
-        top: 10%;
+        top: 15%;
         left: 12.5%;
         right: 12.5%;
         background-image: url(/images/cigna-tag.png);
@@ -32,15 +32,29 @@
         bottom: 55%;
         left: 25%;
         right: 25%;
-
+        color: white;
+        font-family: $sans-serif;
         &.step-up {
             background-image: url(/images/banners/step-up.png);
             bottom: 48%;
         }
 
         &.win-tickets {
-            background-image: url(/images/banners/win-tickets.png);
-            bottom: 50%;
+            text-shadow: 2px 1px 2px rgba(0, 0, 0, 1);
+            // background-image: url(/images/banners/win-tickets.png);
+            bottom: 58%;
+            width: 70%;
+            font-size: 4.5em;
+            text-align: center;
+            left: 15%;
+            text-transform: uppercase;
+
+            .top {
+                color: #efa808;
+                font-size: 0.8em;
+                width: 100%;
+            }
+
         }
         &.leaderboard {
             background-image: url(/images/banners/leaderboard.png);

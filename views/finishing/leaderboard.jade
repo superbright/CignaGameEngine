@@ -1,8 +1,25 @@
 
-extends ../layouts/full-splash
+extends ../layouts/top-logos
 
+block append content
+    
+    .bubble-container.first
+    .bubble-container.second
+    .bubble-container.third
 
-block body
-    +body('#f32308')
-        | Show Leaderboard
+    .leaderboard-header
+        | LEADERBOARD
 
+    .podium-container
+        img(src="/images/trophy.png").trophy
+        .podium
+            img(src="/images/podium.png")
+            .first-place.score
+            .second-place.score
+            .third-place.score
+            .first-place.name
+            .second-place.name
+            .third-place.name
+                
+
+    
