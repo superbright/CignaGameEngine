@@ -50,7 +50,7 @@ GameManager.prototype.startGame = function() {
 
     // Start the 20 seconds of running!
     game.on('gameplayStarted', function() {
-        stepqueue = serial.startSerial();
+//        stepqueue = serial.startSerial();
     });
 
     // The twenty seconds is over.

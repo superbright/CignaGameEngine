@@ -1,8 +1,10 @@
 
 
-var serialPort = '/dev/tty.usbserial-A800f82q';
+var serialPort = '/dev/tty.usbmodem1411';
 var baudRate = 57600;
-var SerialPort = require("serialport").SerialPort
+
+var sp = require("serialport");
+var SerialPort = sp.SerialPort
 
 var SerialQeueu = require('./serialqeueu');
 var serialPort;
@@ -22,8 +24,10 @@ module.exports = SerialManager;
 
 SerialManager.prototype.initSerial = function() {
 
-   serialPort = new SerialPort('/dev/tty.usbserial-A800f82q', {
-        baudrate: 57600
+   serialPort = new SerialPort(serialPort, {
+        baudrate: baudRate,
+        parser: sp.parsers.readline("\n"),
+        buffersize: 64,
     },false);
 
     console.log('init serial');
@@ -51,17 +55,12 @@ SerialManager.prototype.startSerial = function() {
             console.log('open');
             
             serialPort.on('data', function(data) {
-                console.log('data received: ' + data);
+                console.log('data received: ' + data    );
                 queue.push(data);
             });
              serialPort.on('close', function(data) {
                 console.log('serial closed');
             });
-
-            // serialPort.write("ls\n", function(err, results) {
-            //     console.log('err ' + err);
-            //     console.log('results ' + results);
-            // });
         }
      });
 

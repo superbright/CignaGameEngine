@@ -85,11 +85,16 @@ Game.prototype._setState = function() {
             .exec(function(err, game) {
               console.log(game);
 
+              var highscore = 0;
+              if(game) {
+                highscore = game.score;
+              }
+
                 _.each(self.ioChannels, function(nsp) {
                     nsp.emit('setState', {
                         state: state,
                         players: self.players,
-                        highscore: game.score
+                        highscore: highscore
                     });
                 });
             });
@@ -145,7 +150,13 @@ Game.prototype.startGameplay = function() {
         _.each(bufferData, function(d) {
 
             console.log(d);
+            d = d.toString();
             var dData = d.split(',');
+
+            if(dData.length !== 2 || dData[0].length !== 2) {
+                return;
+            }
+            
             var strength = dData[1];
             console.log(dData);
             if(strength == 200) {
