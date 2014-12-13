@@ -40,8 +40,8 @@ function GameplayViewController($el, data) {
     this.count = 0;
 
     if(window.playerPosition === 'left') {
-        this.setMessage(this.players[0].firstName || 'Matthew');
-    } else if (window.playerPosition === 'left' && this.players.length > 1) {
+        this.setMessage(this.players[0].firstName || 'Left Player');
+    } else if (window.playerPosition === 'right' && this.players.length > 1) {
         this.setMessage(this.players[1].firstName || 'Right Player');
     }
 

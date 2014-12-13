@@ -57,13 +57,17 @@ var states = {
         screens: [{
             template: 'countdown/ready'
         }, {
-            template: 'countdown/3'
+            template: 'countdown/3',
+            duration: 1000
         }, {
-            template: 'countdown/2'
+            template: 'countdown/2',
+            duration: 1000
         }, {
-            template: 'countdown/1'
+            template: 'countdown/1',
+            duration: 1000
         }, {
-            template: 'countdown/go'
+            template: 'countdown/go',
+            duration: 500
         }],
         loop: false
     },

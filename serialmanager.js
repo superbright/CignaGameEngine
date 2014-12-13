@@ -1,6 +1,6 @@
 
 
-var serialPort = '/dev/tty.usbmodem1411';
+var serialPortString = '/dev/tty.usbmodem1421';
 var baudRate = 57600;
 
 var sp = require("serialport");
@@ -24,7 +24,7 @@ module.exports = SerialManager;
 
 SerialManager.prototype.initSerial = function() {
 
-   serialPort = new SerialPort(serialPort, {
+   serialPort = new SerialPort(serialPortString, {
         baudrate: baudRate,
         parser: sp.parsers.readline("\n"),
         buffersize: 64,

@@ -43,6 +43,18 @@ function Viz(selector, opts) {
         bottom: 0
     };
 
+    var myName, opponentName;
+
+    if(window.playerPosition === 'left') {
+        myName = opts.players[0].firstName;
+        if(opts.numPlayers > 1) {
+            opponentName = opts.players[0].firstName;
+        }
+    } else if (window.playerPosition === 'right' && opts.players.length > 1) {
+        myName = opts.players[1].firstName;
+        opponentName = opts.players[0].firstName;
+    }
+
     var width = Math.min($el.width(), 600);
     var height = width;
 
@@ -127,7 +139,7 @@ function Viz(selector, opts) {
             .attr('class', 'player-name')
             .attr('text-anchor', 'middle')
             .attr('dy', -25)
-            .text('MATTHEW');
+            .text(myName);
         
         myCircleG
             .append('text')
@@ -151,7 +163,7 @@ function Viz(selector, opts) {
             .attr('class', 'player-name')
             .attr('text-anchor', 'middle')
             .attr('dy', -25)
-            .text('OPPONENT');
+            .text(opponentName);
         
         opponentCircleG
             .append('text')
@@ -189,7 +201,7 @@ function Viz(selector, opts) {
             .attr('class', 'player-name solo')
             .attr('text-anchor', 'middle')
             .attr('dy', -25)
-            .text('MATTHEW');
+            .text(myName);
         
         myG
             .append('text')
@@ -254,7 +266,11 @@ Viz.prototype.calculateAngles = function() {
     var angles = [];
     var expectedMax = this.getExpectedMax();
 
-    // console.log('expected max: ' + expectedMax);
+    console.log('expected max: ' + expectedMax);
+
+    if (expectedMax === 0) {
+        return [];
+    }
 
     _.each(this.data, function(steps) {
         var sum = _.reduce(steps, function(memo, num) { return memo + num; }, 0);
@@ -268,6 +284,9 @@ Viz.prototype.calculateAngles = function() {
 Viz.prototype.updateArcs = function() {
 
     var angles = this.calculateAngles();
+
+    console.log('got angles');
+    console.log(angles);
 
     if(angles.length) {
 
