@@ -1,12 +1,17 @@
 
 
-var SerialManager = require('./serialmanager');
+// var SerialManager = require('./serialmanager');
 
 
-var serial = new SerialManager();
+// var serial = new SerialManager();
 
-serial.initSerial();
-serial.startSerial();
+// serial.initSerial();
+// serial.startSerial();
+
+var LedManager = require('./led-manager');
+var led = new LedManager();
+
+led.initSerial();
 
 
 
@@ -18,3 +23,8 @@ serialPort.list(function (err, ports) {
     console.log(port.manufacturer);
   });
 });
+
+
+setInterval(function() {
+    led.sendStepValues(Math.floor(Math.random() * 19), Math.floor(Math.random() * 19));
+}, 5000);

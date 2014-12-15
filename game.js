@@ -6,6 +6,8 @@ var mongoose = require('mongoose');
 var GameModel = mongoose.model('GameModel');
 var HighScoreGameModel = mongoose.model('HighScoreGameModel');
 
+var LedManager = require('./led-manager');
+
 
 var gameTicks = 20;
 var tickLength = 1000;
@@ -35,6 +37,8 @@ function Game(namespaces, players, s) {
 
     this.ioChannels = [];
     this.ioChannels.push(namespaces[0]);
+    this.ledManager = new LedManager();
+    this.ledManager.initSerial();
     if(this.numPlayers > 1) {
         this.ioChannels.push(namespaces[1]);
     }
@@ -137,8 +141,6 @@ Game.prototype.startGameplay = function() {
     var count = 0;
     var interval = setInterval(function() {
 
-
-
         console.log(buffer.queue());
 
         var bufferData = buffer.queue();
@@ -195,6 +197,8 @@ Game.prototype.startGameplay = function() {
         if(self.numPlayers > 1) {
             gameModel.data.right.steps = gameModel.data.right.steps.concat(rightPlayerData);
         }
+
+        self.ledManager.sendStepValues(Math.min(leftPlayerData.length, 18), Math.min(rightPlayerData.length, 18));
 
         console.log('pushing data: ' + [leftPlayerData.length, rightPlayerData.length]);
         _.each(self.ioChannels, function(nsp) {
