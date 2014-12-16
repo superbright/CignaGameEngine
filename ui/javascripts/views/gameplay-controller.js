@@ -34,7 +34,7 @@ function GameplayViewController($el, data) {
     });
 
     this.$messageEl = $('.message-container .message');
-    this.$boostEl = $('.boost');
+    this.$boostEl = $('.boost-button');
     this.$timerEl = $('.timer-container');
 
     this.count = 0;
@@ -55,6 +55,7 @@ GameplayViewController.prototype.setMessage = function(msg) {
 };
 
 GameplayViewController.prototype.setBoostState = function(state) {
+    console.log('settting boost state: ' + state); 
     this.$boostEl.addClass(state);
 };
 

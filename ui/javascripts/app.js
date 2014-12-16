@@ -34,6 +34,8 @@ slideController.on('stateEnded', function(data) {
 });
 
 socket.on('boost', function() {
+
+    console.log('ACTIVATING BOOST');
     if(slideController.pageController) {
         slideController.pageController.boost();
     }

@@ -40,34 +40,36 @@ var states = {
             template: 'screensaver/leaderboard',
             duration: 4000
         }],
-        loop: false
+        loop: true
     },
 
     instructions: {
         screens: [{
-            template: 'starting/welcome'
+            template: 'starting/welcome',
+            duration: 4000
         }, {
             template: 'starting/instructions',
-            duration: 5000
+            duration: 10000
         }],
         loop: false
     },
 
     countdown: {
         screens: [{
-            template: 'countdown/ready'
+            template: 'countdown/ready',
+            duration: 1500
         }, {
             template: 'countdown/3',
-            duration: 1000
+            duration: 1500
         }, {
             template: 'countdown/2',
-            duration: 1000
+            duration: 1500
         }, {
             template: 'countdown/1',
-            duration: 1000
+            duration: 1500
         }, {
             template: 'countdown/go',
-            duration: 500
+            duration: 750
         }],
         loop: false
     },
@@ -88,7 +90,7 @@ var states = {
         }, {
             template: 'finishing/leaderboard',
             controller: 'leaderboard-controller',
-            duration: 4000
+            duration: 10000
         }],
         loop: false
     }

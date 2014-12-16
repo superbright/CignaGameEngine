@@ -25,6 +25,25 @@ serialPort.list(function (err, ports) {
 });
 
 
-setInterval(function() {
-    led.sendStepValues(Math.floor(Math.random() * 19), Math.floor(Math.random() * 19));
-}, 5000);
+var leftSteps = 0, rightSteps = 0;
+var d3 = require('d3');
+var ledScale = d3.scale.linear().domain([0, 225]).range([0, 19]);
+
+setInterval(function () {
+	led.sendStepValues(ledScale(leftSteps), ledScale(rightSteps));
+}, 1000);
+
+
+setTimeout(function() {
+	setInterval(function () {
+		leftSteps += Math.round(Math.random() * 5);
+	}, 500);
+
+}, Math.random() * 400)
+
+setTimeout(function() {
+	setInterval(function () {
+		rightSteps += Math.round(Math.random() * 5);
+	}, 500);
+
+}, Math.random() * 400)
