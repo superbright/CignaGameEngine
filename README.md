@@ -49,3 +49,8 @@ Will expects a json object like
 #### POST `/start-game`
 
 Starts the game
+
+
+#### GET `/refresh`
+
+Will send a socket event to make the browser windows refresh (in case of an error)
