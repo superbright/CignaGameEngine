@@ -39,16 +39,21 @@ function GameplayViewController($el, data) {
 
     this.count = 0;
 
-    if(window.playerPosition === 'left') {
-        this.setMessage(this.players[0].firstName || 'Left Player');
-    } else if (window.playerPosition === 'right' && this.players.length > 1) {
-        this.setMessage(this.players[1].firstName || 'Right Player');
-    }
-
+    this.setMessage(this._getPlayerName() + ', use your boost!');
 }
 
 
 module.exports = GameplayViewController;
+
+
+GameplayViewController.prototype._getPlayerName = function() {
+    if(window.playerPosition === 'left') {
+        return this.players[0].firstName || 'Left Player';
+    } else if (window.playerPosition === 'right' && this.players.length > 1) {
+        return this.players[1].firstName || 'Right Player';
+    }
+
+};
 
 GameplayViewController.prototype.setMessage = function(msg) {
     this.$messageEl.text(msg);
@@ -79,6 +84,14 @@ GameplayViewController.prototype.boost = function() {
 GameplayViewController.prototype.step = function(data) {
 
     console.log('STEPPING' + (this.count++));
+
+    if(this.count === 18) {
+        this.setMessage(this._getPlayerName() + ', 3 seconds left! Finish strong!')
+    }
+
+    if(this.count === 6) {
+        this.setMessage(this._getPlayerName() + ', keep up the pace!')
+    }
 
     this.setTimerDisplay(20 - this.count);
     console.log(data);

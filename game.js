@@ -15,6 +15,7 @@ var tickLength = 1000;
 var serial;
 
 var gameModel;
+var utils = require('./utilities');
 
 
 /*
@@ -256,8 +257,9 @@ Game.prototype.startGameplay = function() {
             self.ledManager.sendStepValues(ledMap(leftTotal));    
         }
 
+        gameModel.data.left.stepsPerSecond.push(leftPlayerData.length);
+        gameModel.data.right.stepsPerSecond.push(rightPlayerData.length);
 
-        
 
         // self.ledManager.sendStepValues(Math.round(Math.min(leftPlayerData.length * 1.6, 19)), Math.round(Math.min(rightPlayerData.length * 1.6, 19)));
 
@@ -356,11 +358,15 @@ Game.prototype.end = function() {
     //    destroy this game object?
     //
     console.log('ending the game');
+    utils.emailScreenshot(gameModel, 'left');
+    if(this.numPlayers > 1) {
+        utils.emailScreenshot(gameModel, 'right');
+    }
 
     _.each(this.ioChannels, function(nsp) {
         nsp.emit('setState', {
             state: 'screensaver'
-        });        
+        });
     });
 
     this.emit('gameOver');

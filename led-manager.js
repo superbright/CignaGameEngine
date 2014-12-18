@@ -50,7 +50,7 @@ var lastLeft, lastRight;
 LedManager.prototype.sendStepValues = function(left, right) {
 
     if(!opened) {
-        throw new Error('Must open serial port first!');
+        return; //throw new Error('Must open serial port first!');
     }
 
     if(_.isUndefined(right)) {

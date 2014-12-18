@@ -5,7 +5,7 @@ var gameManager = require('../game-manager');
 var mongoose = require('mongoose');
 var GameModel = mongoose.model('GameModel');
 var HighScoreGameModel = mongoose.model('HighScoreGameModel');
-
+var _ = require('lodash');
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -19,6 +19,15 @@ router.get('/left', function(req, res) {
 router.get('/right', function(req, res) {
   res.render('index', { title: 'Express', position: 'right' });
 });
+
+
+router.get('/refresh', function(req, res) {
+  _.each(req.app.get('ios'), function(nsp) {
+    nsp.emit('refresh');
+  })
+  res.status(200).send();
+});
+
 
 router.post('/add-player', function(req, res) {
 
@@ -51,6 +60,15 @@ router.get('/top-scores', function(req, res) {
     });
 });
 
+router.get('/playground', function(req, res) {
+    res.render('playground', { title: 'Express' });
+});
+
+
+router.get('/stats/', function(req, res) {
+  res.render('stats/index', { title: 'Express'});
+});
+
 router.get('/stats/:gid/:position', function(req, res) {
   GameModel.findById(req.params.gid, function(err, game) {
 
@@ -59,7 +77,9 @@ router.get('/stats/:gid/:position', function(req, res) {
     }
 
     if(!game) {
-      return res.status(404).send('Could not find game ' + req.params.gid);
+      // return res.status(404).send('Could not find game ' + req.params.gid);
+          return res.render('stats/index', { title: 'Express'});
+
     }
 
     res.render('stats/index', { title: 'Express', game: game, position: req.params.position });

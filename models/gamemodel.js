@@ -8,18 +8,22 @@ var gameSchema = new Schema({
   players: [{
     firstName: String,
     lastName: String,
-    email: String
+    email: String,
+    accessCode: String,
+    contactMe: Boolean
   }],
   data: {
     left: {
         avgspeed: Number,
         topspeed: Number,
-        steps: Array
+        steps: Array,
+        stepsPerSecond: Array
     },
     right: {
         avgspeed: Number,
         topspeed: Number,
-        steps: Array
+        steps: Array,
+        stepsPerSecond: Array
     }
   }
 });

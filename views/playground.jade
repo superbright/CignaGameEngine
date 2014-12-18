@@ -1,17 +1,13 @@
 extends layout
 
-block content
-  #area-viz
-  #balloon-viz
-  #stopwatch-viz
-  script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
-  script(src='/socket.io/socket.io.js')
-  script(src='/javascripts/app.js')
 
 
 block content
     body
         .outer-container
             .inner-container(style="background-color: #011734;")
-              .balloon.viz-holder
-                  #balloon-viz
+              .heatmap.viz-holder
+                  #heatmap-viz
+      script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+      script(src='/socket.io/socket.io.js')
+      script(src='/javascripts/pages/playground.js')

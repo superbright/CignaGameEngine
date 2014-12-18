@@ -96,7 +96,7 @@
         height: 75%;
         background-repeat: no-repeat;
         position: absolute;
-        top: 0;
+        top: -50%;
         left: 42%;
         right: 42%;
 
@@ -325,5 +325,25 @@ svg {
             // stroke: $blue;
             // stroke-width: 2px;
         }
+    }
+}
+
+
+.heatmap-container {
+    path {
+        fill: none;
+        stroke: white;
+        stroke-dasharray: 3, 3;
+        stroke-width: 3;
+    }
+
+    .axis {
+        path {
+            stroke: none;
+        }
+    }
+
+    text {
+        fill: white;
     }
 }

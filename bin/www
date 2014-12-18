@@ -12,10 +12,13 @@ var server = app.listen(app.get('port'), function() {
 });
 
 var io = require('socket.io')(server);
+app.set('io', io);
 var data = require('./data/dummy.json');
 
 var leftIO = io.of('/left');
 var rightIO = io.of('/right');
+
+app.set('ios', [leftIO, rightIO]);
 
 var gameManager = require('../game-manager');
 gameManager.setChannels([leftIO, rightIO]);

@@ -2,13 +2,23 @@ extends ../layout
 
 block content
 
-    .logo
-    h1
-        | My Stats
+    .outer-container
+        .inner-container.blue.gradient
+            .stats-container
+                .stats-logo
+                .my-stats
 
-    .steps
-        #balloon-viz
-    .speed
+                .steps
+                    .gameicon.run
+                    #balloon-viz
+                
+                .speed
+                    .gameicon.speed
+                    #heatmap-viz
+                    img(src="/images/runners.png")
+
+                .run-together
+                    | #CignaRunTogether
 
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
     script(src='/javascripts/pages/stats.js')

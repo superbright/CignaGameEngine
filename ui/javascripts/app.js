@@ -40,3 +40,8 @@ socket.on('boost', function() {
         slideController.pageController.boost();
     }
 });
+
+socket.on('refresh', function() {
+    console.log('REFRESH');
+    location.reload();
+});
