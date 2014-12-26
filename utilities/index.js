@@ -1,6 +1,9 @@
 var webshot = require('webshot');
 var radiant = require('./radiant');
 var path = require('path');
+var mongoose = require('mongoose');
+var GameModel = mongoose.model('GameModel');
+var HighScoreGameModel = mongoose.model('HighScoreGameModel');
 
 module.exports = {
 
@@ -33,9 +36,10 @@ module.exports = {
 
         var options = {
             screenSize: {
-                width: 1000,
-                height: 2000
+                width: 1500,
+                height: 1500
             }
+            // phantomPath: '/Users/mathisonian/bin/phantomjs'
         };
         
         webshot('http://localhost:3000/stats/' + game + '/' + player, filename, options, function(err) {
@@ -45,6 +49,28 @@ module.exports = {
 
             return cb(null, filename);
         });
+
+    },
+
+
+    getHighScore: function(cb) {
+        HighScoreGameModel
+            .find()
+            .limit(1)
+            .sort('-score')
+            .select('player score')
+            .exec(function(err, games) {
+
+                if(err) {
+                    return cb(err);
+                }
+
+                if(games.length) {
+                    return cb(null, games[0].score);
+                }
+
+                return cb(null, 0);
+            });
 
     }
 };

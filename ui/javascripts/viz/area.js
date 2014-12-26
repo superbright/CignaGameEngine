@@ -16,7 +16,7 @@ var LineGraph = function(selector, data, opts) {
         opts = {};
     }
 
-    this.data = data || [10];
+    this.data = data || [0];
     this.opts = opts;
     var self = this;
 

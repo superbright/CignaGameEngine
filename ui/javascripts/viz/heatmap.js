@@ -17,13 +17,8 @@ var margin = {
 };
 
 
-var data = [21, 8, 6, 10, 13, 16, 17, 18, 7, 8, 6, 10, 13, 16, 17, 18, 13, 12, 19, 2];
 
-var HeatMap = function(selector, opts) {
-
-    if(!opts) {
-        opts = {};
-    }
+var HeatMap = function(selector, data) {
 
     var width = Math.min(600, $(selector).width() - margin.left - margin.right);
     var lineHeight = 150;
@@ -71,7 +66,7 @@ var HeatMap = function(selector, opts) {
         .append('svg:svg')
         .attr('class', 'heatmap-container')
         .attr('width', width + margin.left + margin.right)
-        .attr('height', lineHeight + 200)
+        .attr('height', lineHeight + 100)
         .append('svg:g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 

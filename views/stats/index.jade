@@ -7,6 +7,7 @@ block content
             .stats-container
                 .stats-logo
                 .my-stats
+                    | My Stats
 
                 .steps
                     .gameicon.run
@@ -15,10 +16,17 @@ block content
                 .speed
                     .gameicon.speed
                     #heatmap-viz
+                    #heatmap-score
+                        | #{myScore}
                     img(src="/images/runners.png")
 
                 .run-together
                     | #CignaRunTogether
 
     script(src='//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js')
+    script.
+        window.game = !{JSON.stringify(game)};
+        window.player = "#{position}";
+        window.highScore = #{highScore};
+
     script(src='/javascripts/pages/stats.js')

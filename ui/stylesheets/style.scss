@@ -283,7 +283,12 @@ a {
     background-repeat: no-repeat;
     background-attachment: fixed;
 
+
+    background-image: -webkit-radial-gradient(50% 50%, #043684 36%, #011835 94%);
+    background-image: -o-radial-gradient(100% 100%, #043684 23%, #011835 64%);
+    background-image: -moz-radial-gradient(100% 100%, #043684 23%, #011835 64%);
     background-image: radial-gradient(100% 100%, #043684 23%, #011835 64%);
+
   }
 }
 

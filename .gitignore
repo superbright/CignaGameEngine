@@ -8,3 +8,4 @@ public
 .DS_Store
 
 generated-images/*.jpg
+generated-images/*.png

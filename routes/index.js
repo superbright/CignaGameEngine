@@ -70,26 +70,30 @@ router.get('/stats/', function(req, res) {
 });
 
 router.get('/stats/:gid/:position', function(req, res) {
-  GameModel.findById(req.params.gid, function(err, game) {
 
-    if(err) {
-      return res.status(500).send(err);
-    }
+    utils.getHighScore(function(err, highScore) {
+        GameModel.findById(req.params.gid, function(err, game) {
+            if(err) {
+                return res.status(500).send(err);
+            }
 
-    if(!game) {
-      // return res.status(404).send('Could not find game ' + req.params.gid);
-          return res.render('stats/index', { title: 'Express'});
+            if(!game) {
+              // return res.status(404).send('Could not find game ' + req.params.gid);
+                  return res.render('stats/index', { title: 'Express'});
+            }
 
-    }
+            var position = req.params.position
+            var myScore = game.data[position].steps.length;
+            res.render('stats/index', { title: 'Express', game: game, position: position, highScore: highScore, myScore: myScore });
+        });        
+    })
 
-    res.render('stats/index', { title: 'Express', game: game, position: req.params.position });
-  });
 });
 
 
-router.get('/screenshot', function(req, res) {
+router.get('/screenshot/:gid/:position', function(req, res) {
 
-    utils.getScreenshot('gameid', 'playerid', function(err, filename) {
+    utils.getScreenshot(req.params.gid, req.params.position, function(err, filename) {
 
         if(err) {
             console.log(err);

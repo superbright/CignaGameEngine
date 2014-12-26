@@ -22,14 +22,14 @@ function Viz(selector, opts) {
 
     opts = _.defaults(opts || {}, {
         players: [],
-        highscore: 250
+        highscore: 50
     });
 
     var width = Math.min($el.width(), 600);
     var height = Math.min(width / Math.sqrt(2), 0.7 * $(document).height());
 
     var numPlayers = opts.players.length;
-    var highscore = opts.highscore;
+    var highscore = opts.highscore || 50;
 
     var scores = Array.apply(null, new Array(numPlayers)).map(Number.prototype.valueOf, 0);
     scores = [highscore].concat(scores);

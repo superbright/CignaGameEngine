@@ -9,7 +9,7 @@ var bottomOffset = 5;
 /*
  * View controller
  */
-function Viz(selector, highScore, leftScore, rightScore) {
+function Viz(selector, highScore, competitorScore, myScore) {
     console.log('drawing balloon');
 
     if (!(this instanceof Viz)) {
@@ -20,27 +20,29 @@ function Viz(selector, highScore, leftScore, rightScore) {
 
     this.$el = $el;
 
-    opts = _.defaults(opts || {}, {
-        players: [],
-        highscore: 250
-    });
-
     var width = Math.min($el.width(), 600);
-    var height = Math.min(width / Math.sqrt(2), 0.7 * $(document).height());
+    var height = Math.min(width / Math.sqrt(3));
 
-    var numPlayers = opts.players.length;
-    var highscore = opts.highscore;
+    var numPlayers = 2;
+    if(competitorScore === 0) {
+        numPlayers = 1;
+    }
 
-    var scores = Array.apply(null, new Array(numPlayers)).map(Number.prototype.valueOf, 0);
-    scores = [highscore].concat(scores);
 
-    console.log(scores);
+    var scores;
+    if(numPlayers === 2) {
+        var scores = [highScore, competitorScore, myScore];    
+    } else {
+        var scores = [highScore, myScore];
+    }
 
-    // do some cool vizualization here
+    
 
     var yDomain = d3.extent(scores, function(d) {
         return d;
     });
+
+    yDomain = [0, yDomain[1]];
 
     var ySpread = Math.abs(yDomain[0] - yDomain[1]);
 
@@ -53,7 +55,7 @@ function Viz(selector, highScore, leftScore, rightScore) {
     console.log(x.domain())
 
     var y = d3.scale.linear()
-        .domain([yDomain[0], yDomain[1] + ySpread * 0.35])
+        .domain([0, yDomain[1] + ySpread * 0.50])
         .range([height, 0]);
 
     var margin = {
@@ -73,19 +75,7 @@ function Viz(selector, highScore, leftScore, rightScore) {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient('bottom')
-        // .tickFormat(function(d, i){
-        //     console.log(d, i);
-        //     if(d === 0) {
-        //         return '0';
-        //     }
-
-        //     if(i % 10 === 0) {
-        //         return i + ' sec'
-        //     }
-
-        //     return ''
-        // });
+        .orient('bottom');
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -96,16 +86,18 @@ function Viz(selector, highScore, leftScore, rightScore) {
         .attr('class', 'y axis')
         .call(yAxis);
 
-    // svg.append('g')
-    //     .attr('class', 'x grid')
-    //     .attr('transform', 'translate(0,' + height + ')')
-    //     .call(makeXAxis()
-    //     .tickSize(-height, 0, 0)
-    //     .tickFormat(''));
-
-
-
     
+
+
+
+    svg.append('g')
+        .attr('class', 'y grid')
+        .call(yAxis
+                .tickSize(-width, 0, 0)
+                .tickFormat('')
+        );
+
+
     svg.append('svg:g')
         .attr('class', 'x axis')
         .attr('transform', 'translate(0, ' + (height + bottomOffset) + ')')
@@ -122,16 +114,7 @@ function Viz(selector, highScore, leftScore, rightScore) {
                 }));
 
     svg.selectAll('.x.axis .tick text')
-        .attr('dy', 30);
-
-
-
-    svg.append('g')
-        .attr('class', 'y grid')
-        .call(yAxis
-                .tickSize(-width, 0, 0)
-                .tickFormat('')
-        );
+        .attr('dy', 20);
 
     var lastY = 0;
     svg.selectAll('.y.grid .tick')
@@ -275,26 +258,5 @@ Viz.prototype.updateBalloons = function() {
     balloonGroups.exit().remove();
 
 }
-
-Viz.prototype.appendData = function(data) {
-
-    // console.log(data);
-
-    if(this.data.length > 2) {
-        // opponent
-        this.data[1] = this.data[1] + data[1];
-        // you
-        this.data[2] = this.data[2] + data[0];
-    } else {
-        this.data[1] = this.data[1] + data[0];
-    }
-    
-    this.updateBalloons();
-}
-
-
-Viz.prototype.destroy = function() {
-    // destroy d3 object
-};
 
 module.exports = Viz;
