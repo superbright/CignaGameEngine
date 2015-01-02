@@ -33,7 +33,8 @@ router.post('/add-player', function(req, res) {
 
   console.log('adding player');
   console.log(req.body.player);
-  gameManager.addPlayer(req.body.player);
+  var playercount = gameManager.addPlayer(req.body.player);
+  console.log(playercount);
   res.status(200).send();
 });
 

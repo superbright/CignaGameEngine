@@ -24,8 +24,14 @@ GameManager.prototype.addPlayer = function(player) {
         throw new Error('Can\'t add players while there is a game in progress.');
     }
 
+    if(players.length > 0 && players[0]['accessCode'] == player['accessCode']) {
+        console.log('accesscode already exists');
+         throw new Error('Player already added');
+    }
+
     if(players.length < 2) {
         players.push(player);
+        return players.length;
     } else {
         throw new Error('Can\'t have more than two players');
     }

@@ -107,6 +107,7 @@ Game.prototype._advanceState = function() {
         });
     });
 
+    console.log("_advanceState");
 
     this.stateIndex++;
     if(this.stateIndex > this.states.length - 1) {

@@ -34,7 +34,7 @@ LedManager.prototype.initSerial = function() {
 
    serialPort.open(function(error) {
     if(error) {
-        console.log(error);
+        console.log("fail " + error);
     } else {
         opened = true;
     }

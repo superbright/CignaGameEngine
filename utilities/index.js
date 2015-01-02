@@ -16,6 +16,8 @@ module.exports = {
                 return console.log('problem gettng screenshot');
             }
 
+            console.log('got file ' + filename);
+            
             radiant.addParticipation(filename, {
                 accessCode: gameObj.players[(player === 'left' ? 0 : 1)].accessCode || 100,
                 activityData: JSON.stringify(gameObj.data[player].stepsPerSecond),
