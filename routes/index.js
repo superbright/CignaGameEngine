@@ -33,19 +33,43 @@ router.post('/add-player', function(req, res) {
 
   console.log('adding player');
   console.log(req.body.player);
-  var playercount = gameManager.addPlayer(req.body.player);
-  console.log(playercount);
-  res.status(200).send();
+
+  try {
+    var playercount = gameManager.addPlayer(req.body.player);
+
+    console.log(playercount);
+    res.status(200).send();
+  } catch(err){
+    res.status(500).json({
+      message: err.toString()
+    });
+  }
+
+
 });
 
 router.post('/start-game', function(req, res) {
-  gameManager.startGame();
-  res.status(200).send();
+
+  try {
+    gameManager.startGame();
+    res.status(200).send();
+  } catch(err){
+    res.status(500).json({
+      message: err.toString()
+    });
+  }
+  
 });
 
 router.post('/clear-players', function(req, res) {
-  gameManager.clearPlayers();
-  res.status(200).send();
+  try {
+    gameManager.clearPlayers();
+    res.status(200).send();
+  } catch(err){
+    res.status(500).json({
+      message: err.toString()
+    });
+  }
 });
 
 router.get('/top-scores', function(req, res) {
