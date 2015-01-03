@@ -112,6 +112,17 @@ Game.prototype._advanceState = function() {
     this.stateIndex++;
     if(this.stateIndex > this.states.length - 1) {
         this.end();
+        // _.each(this.ioChannels, function(nsp) {
+        //     _.each(nsp.connected, function(socket, socketId) {
+        //         socket.on('stateEnded', function(data) {
+        //             nsp.emit('setState', {
+        //                 state: 'screensaver'
+        //             });
+        //         });
+
+        //     });
+        // });
+
     } else {
         this._setState();
         //this.end(); //debug
@@ -233,10 +244,10 @@ Game.prototype.startGameplay = function() {
                 rightPlayerData.push(dData[0][1] + ',' + strength);
             }
         });
-        // console.log('leftPlayerData');
-        // console.log(leftPlayerData);
-        // console.log('rightPlayerData');
-        // console.log(rightPlayerData);
+        console.log('leftPlayerData');
+        console.log(leftPlayerData);
+        console.log('rightPlayerData');
+        console.log(rightPlayerData);
 
         if(self.leftBoostActive) {
             leftPlayerData = leftPlayerData.concat(leftPlayerData);
@@ -303,7 +314,7 @@ Game.prototype.endGameplay = function() {
 
         var rightPlayerGame = new HighScoreGameModel({
             player: _.omit(this.players[1], 'email'),
-            score: gameModel.data.left.steps.length
+            score: gameModel.data.right.steps.length
         });
 
         rightPlayerGame.save();
@@ -364,11 +375,16 @@ Game.prototype.end = function() {
         utils.emailScreenshot(gameModel, 'right');
     }
 
-    _.each(this.ioChannels, function(nsp) {
-        nsp.emit('setState', {
-            state: 'screensaver'
+    var self = this;
+
+    setTimeout(function() {
+        _.each(self.ioChannels, function(nsp) {
+            nsp.emit('setState', {
+                state: 'screensaver'
+            });
         });
-    });
+    }, 5000);
+    
 
     this.emit('gameOver');
 

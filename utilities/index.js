@@ -35,6 +35,7 @@ module.exports = {
 
         var filename = game + '-' + player + '.jpg';
         filename = path.resolve(__dirname + '/../generated-images/' + filename);
+        console.log("filename "+filename);
 
         var options = {
             screenSize: {
@@ -46,6 +47,7 @@ module.exports = {
         
         webshot('http://localhost:3000/stats/' + game + '/' + player, filename, options, function(err) {
             if(err) {
+                console.log(err);
                 return cb(err);
             } 
 
