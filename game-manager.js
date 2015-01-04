@@ -1,7 +1,6 @@
 
 var players = [];
 var Game = require('./game');
-var game = null;
 var SerialManager = require('./serialmanager');
 
 
@@ -15,12 +14,15 @@ function GameManager() {
     if (!(this instanceof GameManager)) {
         return new GameManager();
     }
+
+    this.game = null;
 }
 
 
 GameManager.prototype.addPlayer = function(player) {
 
-    if(game !== null) {
+    console.log(this.game);
+    if(this.game != null) {
         throw new Error('Can\'t add players while there is a game in progress.');
     }
 
@@ -31,6 +33,8 @@ GameManager.prototype.addPlayer = function(player) {
 
     if(players.length < 2) {
         players.push(player);
+
+        console.log(players);
         return players.length;
     } else {
         throw new Error('Can\'t have more than two players');
@@ -42,6 +46,10 @@ GameManager.prototype.startGame = function() {
     console.log('starting game');
     console.log(players);
 
+    if(this.game != null) {
+        throw new Error('There is already a game in progress.');
+    }
+
 
     if(!players.length) {
         throw new Error('Can\'t start game without any players.');
@@ -50,7 +58,8 @@ GameManager.prototype.startGame = function() {
     serial.initSerial();
     var stepqueue;
 
-    var game = new Game(this.ioChannels, players, serial);
+    this.game = new Game(this.ioChannels, players, serial);
+    var game = this.game;
     game.start();
     var self = this;
 
@@ -66,14 +75,20 @@ GameManager.prototype.startGame = function() {
 
     // This is after the leaderboard screens, etc. have cleared.
     game.on('gameOver', function() {
-        game = null;
+        console.log('[gameManager] - gameOver');
+        game.removeAllListeners();
+        self.game = null;
         self.clearPlayers();
     });
 
-    return game;
 };
 
 GameManager.prototype.clearPlayers = function() {
+
+    if(this.game != null) {
+        throw new Error('Cannot clear players with a game in progress.');
+    }
+
     players = [];
 };
 

@@ -183,6 +183,9 @@ SlideViewController.prototype.setScreen = function(data) {
             self.setScreen(data);
         } else {
             self.emit('stateEnded', {state: self.state});
+            if(self.state === 'postgame') {
+                self.setState('screensaver', {})
+            }
         }
     }, s.duration || defaultSlideTime);
     this.timeouts.push(to);

@@ -31,7 +31,7 @@ module.exports = {
             restler.post(baseUrl + '/addParticipation.php', {
                 multipart: true,
                 data: _.extend(opts, {
-                    accessCode: '1234012',
+                    //accessCode: '1234012',
                     mediaFile_1: restler.file(filepath, null, stats.size, null, "image/jpg")    
                 })
             }).on("complete", function(data) {

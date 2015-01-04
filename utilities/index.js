@@ -19,7 +19,7 @@ module.exports = {
             console.log('got file ' + filename);
             
             radiant.addParticipation(filename, {
-                accessCode: gameObj.players[(player === 'left' ? 0 : 1)].accessCode || 100,
+                accessCode: (gameObj.players[(player === 'left' ? 0 : 1)] || {}).accessCode || 100,
                 activityData: JSON.stringify(gameObj.data[player].stepsPerSecond),
                 activity: 'cigna'
             }, function(err, data) {
@@ -35,7 +35,7 @@ module.exports = {
 
         var filename = game + '-' + player + '.jpg';
         filename = path.resolve(__dirname + '/../generated-images/' + filename);
-        console.log("filename "+filename);
+        console.log(" generating filename "+filename);
 
         var options = {
             screenSize: {
