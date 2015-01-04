@@ -59,24 +59,23 @@ GameManager.prototype.startGame = function() {
     var stepqueue;
 
     this.game = new Game(this.ioChannels, players, serial);
-    var game = this.game;
-    game.start();
+    this.game.start();
     var self = this;
 
     // Start the 20 seconds of running!
-    game.on('gameplayStarted', function() {
+    this.game.on('gameplayStarted', function() {
 //        stepqueue = serial.startSerial();
     });
 
     // The twenty seconds is over.
-    game.on('gameplayEnded', function() {
+    this.game.on('gameplayEnded', function() {
         serial.stopSerial();
     });
 
     // This is after the leaderboard screens, etc. have cleared.
-    game.on('gameOver', function() {
+    this.game.on('gameOver', function() {
         console.log('[gameManager] - gameOver');
-        game.removeAllListeners();
+        self.game.removeAllListeners();
         self.game = null;
         self.clearPlayers();
     });

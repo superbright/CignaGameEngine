@@ -1,3 +1,4 @@
+'use strict';
 
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -6,17 +7,14 @@ var mongoose = require('mongoose');
 var GameModel = mongoose.model('GameModel');
 var HighScoreGameModel = mongoose.model('HighScoreGameModel');
 var d3 = require('d3');
-
+var gid = 0;
 var LedManager = require('./led-manager');
 
 
 var gameTicks = 20;
 var tickLength = 1000;
-var serial;
 
-var gameModel;
 var utils = require('./utilities');
-var gid = 0;
 
 
 /*
@@ -29,10 +27,12 @@ function Game(namespaces, players, s) {
     this.players = players;
     this.numPlayers = players.length;
 
-    serial = s;
+    this.serial = s;
 
     console.log('starting game with players');
     console.log(players);
+
+    this.ended = false;
 
     // take an array of buffers
     // either [leftBuffer] or [leftBuffer, rightBuffer]
@@ -111,7 +111,6 @@ Game.prototype._advanceState = function() {
 
     console.log("_advanceState");
 
-
     this.stateIndex++;
     console.log("[game " + this.gid + "] current state: " + this.states[this.stateIndex]);
     if(this.stateIndex > this.states.length - 1) {
@@ -173,7 +172,6 @@ Game.prototype._setState = function() {
         _.each(nsp.connected, function(socket, socketId) {
             socket.on('stateEnded', function(data) {
                 if(data.state === state) {
-                    console.log('state ended ' + state);
                     self.clientCompleted();
                 }
             });
@@ -188,7 +186,7 @@ Game.prototype.startGameplay = function() {
 
     this.emit('gameplayStarted');
 
-    buffer = serial.startSerial();
+    var buffer = this.serial.startSerial();
 
     var leftTotal = 0, rightTotal = 0;
 
@@ -238,10 +236,10 @@ Game.prototype.startGameplay = function() {
                 rightPlayerData.push(dData[0][1] + ',' + strength);
             }
         });
-        console.log('leftPlayerData');
-        console.log(leftPlayerData);
-        console.log('rightPlayerData');
-        console.log(rightPlayerData);
+        // console.log('leftPlayerData');
+        // console.log(leftPlayerData);
+        // console.log('rightPlayerData');
+        // console.log(rightPlayerData);
 
         if(self.leftBoostActive) {
             leftPlayerData = leftPlayerData.concat(leftPlayerData);
@@ -252,19 +250,19 @@ Game.prototype.startGameplay = function() {
         }
 
         // Add real data to the database model
-        gameModel.data.left.steps = gameModel.data.left.steps.concat(leftPlayerData);
+        self.gameModel.data.left.steps = self.gameModel.data.left.steps.concat(leftPlayerData);
 
         leftTotal += leftPlayerData.length;
         rightTotal += rightPlayerData.length;
         if(self.numPlayers > 1) {
-            gameModel.data.right.steps = gameModel.data.right.steps.concat(rightPlayerData);
+            self.gameModel.data.right.steps = self.gameModel.data.right.steps.concat(rightPlayerData);
             self.ledManager.sendStepValues(ledMap(leftTotal), ledMap(rightTotal));
         } else {
             self.ledManager.sendStepValues(ledMap(leftTotal));    
         }
 
-        gameModel.data.left.stepsPerSecond.push(leftPlayerData.length);
-        gameModel.data.right.stepsPerSecond.push(rightPlayerData.length);
+        self.gameModel.data.left.stepsPerSecond.push(leftPlayerData.length);
+        self.gameModel.data.right.stepsPerSecond.push(rightPlayerData.length);
 
 
         // self.ledManager.sendStepValues(Math.round(Math.min(leftPlayerData.length * 1.6, 19)), Math.round(Math.min(rightPlayerData.length * 1.6, 19)));
@@ -291,12 +289,12 @@ Game.prototype.endGameplay = function() {
     
     this.emit('gameplayEnded');
 
-    console.log(gameModel);
+    console.log(this.gameModel);
 
 
     var leftPlayerGame = new HighScoreGameModel({
         player: _.omit(this.players[0], 'email'),
-        score: gameModel.data.left.steps.length
+        score: this.gameModel.data.left.steps.length
     });
 
     var winner = 'left';
@@ -308,7 +306,7 @@ Game.prototype.endGameplay = function() {
 
         var rightPlayerGame = new HighScoreGameModel({
             player: _.omit(this.players[1], 'email'),
-            score: gameModel.data.right.steps.length
+            score: this.gameModel.data.left.steps.length
         });
 
         rightPlayerGame.save();
@@ -320,18 +318,20 @@ Game.prototype.endGameplay = function() {
     }
 
     // todo - set winner
-    gameModel.winner = winner;
-    gameModel.topscore = topscore;
+    this.gameModel.winner = winner;
+    this.gameModel.topscore = topscore;
 
     
-    gameModel.save(function(err) {
+    this.gameModel.save(function(err) {
     });
+
+
 
     setTimeout(function() {
         self.ledManager.sendStepValues(-1, -1);
     }, 15000);
 
-    setTimeout(function() {        
+    setTimeout(function() {    
         self._advanceState();
     }, 5000);
 };
@@ -350,8 +350,8 @@ Game.prototype.start = function() {
         self.ledManager.sendStepValues(-1, -1);
     }, 2000);
     
-    gameModel = new GameModel();
-    gameModel.players = this.players;
+    this.gameModel = new GameModel();
+    this.gameModel.players = this.players;
     this._advanceState();
 };
 
@@ -362,24 +362,32 @@ Game.prototype.end = function() {
     //  * emit game over event so the server can 
     //    destroy this game object?
     //
-    console.log('ending the game');
-    utils.emailScreenshot(gameModel, 'left');
-    if(this.numPlayers > 1) {
-        utils.emailScreenshot(gameModel, 'right');
+
+    if (this.ended) {
+        return;
     }
 
-    var self = this;
 
-    // setTimeout(function() {
-    //     console.log('emitting screensaver state');
-    //     _.each(self.ioChannels, function(nsp) {
-    //         nsp.emit('setState', {
-    //             state: 'screensaver'
-    //         });
-    //     });
-    // }, 5000);
-    
+    console.log('ending the game');
+    utils.emailScreenshot(this.gameModel, 'left');
+    if(this.numPlayers > 1) {
+        utils.emailScreenshot(this.gameModel, 'right');
+    }
 
+    _.each(this.ioChannels, function(nsp) {
+        nsp.emit('setState', {
+            state: 'screensaver'
+        });
+    });
+
+
+    _.each(this.ioChannels, function(nsp) {
+        _.each(nsp.connected, function(socket) {
+            socket.removeAllListeners();
+        });
+    });
+
+    this.ended = true;
     this.emit('gameOver');
 
 };
