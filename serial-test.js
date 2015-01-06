@@ -27,7 +27,7 @@ serialPort.list(function (err, ports) {
 
 var leftSteps = 0, rightSteps = 0;
 var d3 = require('d3');
-var ledScale = d3.scale.linear().domain([0, 225]).range([0, 19]);
+var ledScale = d3.scale.linear().domain([0, 225]).range([0, 16]).clamp(true);
 
 setInterval(function () {
 	led.sendStepValues(ledScale(leftSteps), ledScale(rightSteps));

@@ -190,7 +190,7 @@ Game.prototype.startGameplay = function() {
 
     var leftTotal = 0, rightTotal = 0;
 
-    var ledMap = d3.scale.linear().domain([0, 225]).range([0, 19]);
+    var ledMap = d3.scale.linear().domain([0, 225]).range([0, 16]).clamp(true);
 
     // do 20 pings
     var count = 0;
