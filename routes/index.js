@@ -76,6 +76,7 @@ router.get('/top-scores', function(req, res) {
   
   HighScoreGameModel
     .find()
+    .where('score').gt(20)
     .limit(75)
     .sort('-score')
     .select('player score')
