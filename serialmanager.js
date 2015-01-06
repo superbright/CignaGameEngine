@@ -1,6 +1,6 @@
 
 
-var serialPortString = '/dev/tty.usbmodem1421';
+var serialPortString = '/dev/tty.usbmodem14211';
 var baudRate = 57600;
 
 var sp = require("serialport");

@@ -1,7 +1,7 @@
 
 var _ = require('lodash');
 
-var serialPortString = '/dev/tty.usbmodem590551';
+var serialPortString = '/dev/tty.usbmodem594401';
 var baudRate = 57600;
 
 var sp = require("serialport");

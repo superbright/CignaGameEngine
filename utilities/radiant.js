@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-var baseUrl = 'http://app.radiantevent.com/cigna/disneyMarathon/dev';
+var baseUrl = 'http://20.20.20.110';
 var _ = require('lodash');
 var restler = require('restler');
 
