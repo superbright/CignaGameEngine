@@ -48,7 +48,7 @@ function Viz(selector, opts) {
     if(window.playerPosition === 'left') {
         myName = opts.players[0].firstName;
         if(opts.numPlayers > 1) {
-            opponentName = opts.players[0].firstName;
+            opponentName = opts.players[1].firstName;
         }
     } else if (window.playerPosition === 'right' && opts.players.length > 1) {
         myName = opts.players[1].firstName;

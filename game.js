@@ -306,7 +306,7 @@ Game.prototype.endGameplay = function() {
 
         var rightPlayerGame = new HighScoreGameModel({
             player: _.omit(this.players[1], 'email'),
-            score: this.gameModel.data.left.steps.length
+            score: this.gameModel.data.right.steps.length
         });
 
         rightPlayerGame.save();

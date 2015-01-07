@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-var baseUrl = 'http://20.20.20.110';
+var baseUrl = 'http://20.20.20.110:80';
 var _ = require('lodash');
 var restler = require('restler');
 
