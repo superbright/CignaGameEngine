@@ -331,6 +331,10 @@ Game.prototype.endGameplay = function() {
         self.ledManager.sendStepValues(-1, -1);
     }, 15000);
 
+     setTimeout(function() {
+        self.ledManager.sendStepValues(16, 16);
+    }, 19000);
+
     setTimeout(function() {    
         self._advanceState();
     }, 5000);
