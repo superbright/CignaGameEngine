@@ -11,7 +11,7 @@ var gid = 0;
 var LedManager = require('./led-manager');
 
 
-var gameTicks = 20;
+var gameTicks = 15;
 var tickLength = 1000;
 
 var utils = require('./utilities');
