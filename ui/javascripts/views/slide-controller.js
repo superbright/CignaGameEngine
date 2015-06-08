@@ -22,7 +22,10 @@ var defaultSlideTime = 3000;
 
 
 var states = {
-
+// , {
+//             template: 'screensaver/win',
+//             duration: 4000
+//         }
     screensaver: {
         screens: [{
             template: 'screensaver/big-cigna',
@@ -32,9 +35,6 @@ var states = {
             duration: 4000
         }, {
             template: 'screensaver/step-up',
-            duration: 4000
-        }, {
-            template: 'screensaver/win',
             duration: 4000
         }, {
             template: 'screensaver/leaderboard',
